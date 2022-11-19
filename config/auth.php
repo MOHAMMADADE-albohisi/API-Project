@@ -46,6 +46,11 @@ return [
             'provider' => 'sellers',
         ],
 
+        'buyer' => [
+            'driver' => 'passport',
+            'provider' => 'buyers',
+        ],
+
     ],
 
     /*
@@ -76,6 +81,11 @@ return [
             'model' => App\Models\Seller::class,
         ],
 
+
+        'buyers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Buyer::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
