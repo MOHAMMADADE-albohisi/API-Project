@@ -29,6 +29,10 @@ class OrderProduct extends Model
         return $this->belongsTo(Buyer::class, 'buyer_id', 'id');
     }
 
+    public function orderDrivers()
+    {
+        return $this->hasMany(OrderDriver::class, 'order_product_id', 'id');
+    }
 
     public function store()
     {

@@ -16,6 +16,11 @@ class Seller extends Authenticatable
     {
         return $this->belongsTo(Store::class, 'store_id', 'id');
     }
+    public function orderDriver()
+    {
+        return $this->hasMany(OrderDriver::class, 'seller_id', 'id');
+    }
+
 
     protected $hidden = [
         'password',

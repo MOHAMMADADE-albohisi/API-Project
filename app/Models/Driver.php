@@ -14,6 +14,11 @@ class Driver extends Model
         return $this->belongsTo(Store::class, 'store_id', 'id');
     }
 
+    public function orderDriver()
+    {
+        return $this->hasMany(OrderDriver::class, 'driver_id', 'id');
+    }
+
     protected $hidden = [
         'password',
         'updated_at',

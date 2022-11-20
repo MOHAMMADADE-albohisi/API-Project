@@ -29,6 +29,11 @@ class Store extends Model
         return $this->hasMany(OrderProduct::class, 'store_id', 'id');
     }
 
+    public function OrderDriver()
+    {
+        return $this->hasMany(OrderDriver::class, 'store_id', 'id');
+    }
+
     protected $hidden = [
         'updated_at',
     ];
