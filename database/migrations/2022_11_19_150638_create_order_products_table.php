@@ -28,7 +28,6 @@ return new class extends Migration
 
             $table->integer('count')->unsigned();
             $table->float('item_price');
-            $table->float('total');
             $table->timestamps();
         });
     }

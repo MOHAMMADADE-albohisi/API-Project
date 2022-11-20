@@ -37,8 +37,8 @@ class BuyerController extends Controller
 
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
-                'client_id' => '5',
-                'client_secret' => 'xASKhlTPy74BrwfpWOfYUP158lxNCT6JFhpQtl9u',
+                'client_id' => '4',
+                'client_secret' => 'vCTqvlbf9JyXeWDpGRQ7zHbKfRPKDHh6tXxmuC0w',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*',

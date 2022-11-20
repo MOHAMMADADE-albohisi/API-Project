@@ -35,8 +35,8 @@ class AuthController extends Controller
 
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
-                'client_id' => '4',
-                'client_secret' => 'rDzEbGGs6hTe7p8ZUsN9c2dnlLMkBpBGVQJN03tP',
+                'client_id' => '3',
+                'client_secret' => 'xZLifOcYwhj7Bvi7v62g6VKXqOZwYvVRaaGgPAsl',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*',
