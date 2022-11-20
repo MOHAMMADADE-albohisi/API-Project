@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductDetalisController;
 use App\Http\Controllers\Api\RegisterSellerController;
+use App\Http\Controllers\Api\SellerController;
+use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -48,6 +50,16 @@ Route::prefix('cms/admin')->middleware('auth:seller')->group(function () {
     Route::delete('driver/{id}', [DriverController::class, 'destroy']);
 
 
+    Route::get('/store', [StoreController::class, 'index']);
+    Route::post('/store/create', [StoreController::class, 'store']);
+    Route::put('/store/{id}', [StoreController::class, 'update']);
+    Route::delete('store/{id}', [StoreController::class, 'destroy']);
+
+
+    Route::get('/OrderProducts', [SellerController::class, 'OrderProducts']);
+
+
+
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });
@@ -63,8 +75,11 @@ Route::prefix('auth')->group(function () {
 Route::prefix('cms/buyer')->middleware('auth:buyer')->group(function () {
 
     Route::post('/product/{id}', [ProductDetalisController::class, 'ProductDetails']);
-    
+
     Route::get('/driver', [DriverController::class, 'index']);
+
+    Route::get('/store', [StoreController::class, 'index']);
+
 
 
 

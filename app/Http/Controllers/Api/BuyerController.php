@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Buyer;
+use Dotenv\Loader\Loader;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -47,6 +48,7 @@ class BuyerController extends Controller
             $decodedResponse = json_decode($response);
             $buyer = Buyer::where('email', '=', $request->input('email'))->first();
             $buyer->setAttribute('token', $decodedResponse->access_token);
+            $buyer->load('store');
             return response()->json([
                 'status' => true,
                 'message' => 'Logged in successfully',
@@ -81,6 +83,7 @@ class BuyerController extends Controller
     {
         //
         $validator = validator($request->all(), [
+            'store_id' => 'required|numeric|exists:stores,id',
             'name' => 'required|string|min:3',
             'email' =>  'required|string|unique:sellers',
             'mobile' => 'required|numeric',
@@ -89,6 +92,7 @@ class BuyerController extends Controller
         ]);
         if (!$validator->fails()) {
             $buyer = new Buyer();
+            $buyer->store_id = $request->input('store_id');
             $buyer->name = $request->input('name');
             $buyer->email = $request->input('email');
             $buyer->mobile = $request->input('mobile');

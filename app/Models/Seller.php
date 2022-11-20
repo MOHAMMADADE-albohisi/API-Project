@@ -12,6 +12,11 @@ class Seller extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id', 'id');
+    }
+
     protected $hidden = [
         'password',
         'remember_token',

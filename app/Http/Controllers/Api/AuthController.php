@@ -46,6 +46,7 @@ class AuthController extends Controller
             $decodedResponse = json_decode($response);
             $seller = Seller::where('email', '=', $request->input('email'))->first();
             $seller->setAttribute('token', $decodedResponse->access_token);
+            $seller->load('store');
             return response()->json([
                 'status' => true,
                 'message' => 'Logged in successfully',

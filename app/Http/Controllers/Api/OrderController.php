@@ -20,7 +20,7 @@ class OrderController extends Controller
         })->get();
         $orders->load('order');
         $orders->load('product');
-
+        $orders->load('store');
         return response()->json([
             'status' => true,
             'message' => "Success",
@@ -30,10 +30,11 @@ class OrderController extends Controller
 
     public function store(Request $request, Order $order)
     {
+
         $validator = validator($request->all(), [
+            'store_id' => 'required|numeric|exists:stores,id',
             'total' => 'required|numeric',
             'payment_type' => 'required|string|in:Cash,Online',
-            'status' => 'required|string|in:Waiting,Processing,Delivered,Cancel',
             'payment_status' => 'required|string|in:Paid,Waiting',
             'count' => 'required|numeric',
             'item_price' => 'required|numeric',
@@ -44,11 +45,11 @@ class OrderController extends Controller
             $order = new Order();
             $order->total = $request->input('total');
             $order->payment_type = $request->input('payment_type');
-            $order->status = $request->input('status');
             $order->payment_type = $request->input('payment_type');
             $isSaved = $order->save();
             if ($isSaved) {
                 $orderProduct = new OrderProduct();
+                $orderProduct->store_id = $request->input('store_id');
                 $orderProduct->count = $request->input('count');
                 $orderProduct->item_price = $request->input('item_price');
                 $orderProduct->product_id = $request->input('product');

@@ -14,6 +14,7 @@ class DriverController extends Controller
     public function index()
     {
         $drivers =  Driver::all();
+        $drivers->load('stroe');
         return response()->json([
             'status' => true,
             'message' => "Success",
@@ -24,6 +25,7 @@ class DriverController extends Controller
     public function Store(Request $request, Driver $driver)
     {
         $validator = validator($request->all(), [
+            'store_id' => 'required|numeric|exists:stores,id',
             'full_name' => 'required|string|min:3',
             'email' =>  'required|string|unique:drivers',
             'mobile' => 'required|string',
@@ -32,6 +34,7 @@ class DriverController extends Controller
         ]);
         if (!$validator->fails()) {
             $driver = new Driver();
+            $driver->store_id = $request->input('store_id');
             $driver->full_name = $request->input('full_name');
             $driver->email = $request->input('email');
             $driver->mobile = $request->input('mobile');
@@ -60,12 +63,14 @@ class DriverController extends Controller
     {
         $driver = Driver::find($id);
         $validator = validator($request->all(), [
+            'store_id' => 'required|numeric|exists:stores,id',
             'full_name' => 'required|string|min:3',
-            'email' =>  'required|string|unique:drivers',
+            'email' =>  'required|string',
             'mobile' => 'required|string',
         ]);
 
         if (!$validator->fails()) {
+            $driver->store_id = $request->input('store_id');
             $driver->full_name = $request->input('full_name');
             $driver->email = $request->input('email');
             $driver->mobile = $request->input('mobile');

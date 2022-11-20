@@ -20,6 +20,12 @@ class Buyer extends Authenticatable
     }
 
 
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id', 'id');
+    }
+
+
     protected $hidden = [
         'password',
         'remember_token',
