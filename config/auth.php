@@ -51,6 +51,12 @@ return [
             'provider' => 'buyers',
         ],
 
+
+        'driver' => [
+            'driver' => 'passport',
+            'provider' => 'drivers',
+        ],
+
     ],
 
     /*
@@ -86,6 +92,12 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Buyer::class,
         ],
+
+        'drivers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Driver::class,
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

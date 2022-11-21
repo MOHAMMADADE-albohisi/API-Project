@@ -21,8 +21,9 @@ class OrderDriverController extends Controller
                 $query->where('seller_id', '=', $request->user()->id);
             })->get();
         $orderDriver->load('orderProduct');
-        $orderDriver->load('seller');
         $orderDriver->load('driver');
+        $orderDriver->load('product');
+        $orderDriver->load('buyer');
 
         return response()->json([
             'status' => true,
@@ -34,12 +35,23 @@ class OrderDriverController extends Controller
     public function store(Request $request, OrderDriver $orderdriver)
     {
         $validator = validator($request->all(), [
-            'order_product_id' => 'required|numeric|exists:order_products,id',
+            'order_id' => 'required|numeric|exists:order_products,id',
             'driver_id' => 'required|numeric|exists:drivers,id',
+            'buyer_id' => 'required|numeric|exists:buyers,id',
+            'product_id' => 'required|numeric|exists:products,id',
+            'store_id' => 'required|numeric|exists:stores,id',
+            'count' => 'required|numeric',
+            'item_price' => 'required|numeric',
         ]);
         if (!$validator->fails()) {
             $orderdriver = new OrderDriver();
-            $orderdriver->order_product_id = $request->input('order_product_id');
+            $orderdriver->count = $request->input('count');
+            $orderdriver->item_price = $request->input('item_price');
+            $orderdriver->order_id = $request->input('order_id');
+            $orderdriver->buyer_id = $request->input('buyer_id');
+            $orderdriver->product_id = $request->input('product_id');
+            $orderdriver->store_id = $request->input('store_id');
+
             $seller = Auth::guard('seller')->user();
             $orderdriver->seller_id = $seller->id;
             $orderdriver->driver_id = $request->input('driver_id');

@@ -15,14 +15,29 @@ return new class extends Migration
     {
         Schema::create('order_drivers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_product_id');
-            $table->foreign('order_product_id')->references('id')->on('order_products');
+
+            $table->integer('count')->unsigned();
+            $table->float('item_price');
+
+            $table->foreignId('store_id');
+            $table->foreign('store_id')->references('id')->on('stores');
+
+            $table->foreignId('order_id');
+            $table->foreign('order_id')->references('id')->on('orders');
+
+            $table->foreignId('buyer_id');
+            $table->foreign('buyer_id')->references('id')->on('buyers');
 
             $table->foreignId('seller_id');
             $table->foreign('seller_id')->references('id')->on('sellers');
 
             $table->foreignId('driver_id');
             $table->foreign('driver_id')->references('id')->on('drivers');
+
+            $table->foreignId('product_id');
+            $table->foreign('product_id')->references('id')->on('products');
+
+
             $table->timestamps();
         });
     }

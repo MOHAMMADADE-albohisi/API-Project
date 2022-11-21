@@ -19,6 +19,11 @@ class Buyer extends Authenticatable
         return $this->hasMany(Order::class, 'buyer_id', 'id');
     }
 
+    public function Suggestions()
+    {
+        return $this->hasMany(Suggestion::class, 'buyer_id', 'id');
+    }
+
 
     public function store()
     {

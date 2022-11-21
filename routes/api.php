@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AuthDriverController;
 use App\Http\Controllers\Api\BuyerController;
 use App\Http\Controllers\Api\DriverController;
+use App\Http\Controllers\Api\DriverControllerAll;
 use App\Http\Controllers\Api\HomeBuyerController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderDriverController;
@@ -11,8 +13,10 @@ use App\Http\Controllers\Api\ProductDetalisController;
 use App\Http\Controllers\Api\RegisterSellerController;
 use App\Http\Controllers\Api\SellerController;
 use App\Http\Controllers\Api\StoreController;
+use App\Http\Controllers\Api\SuggestionController;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Suggestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -109,5 +113,41 @@ Route::prefix('cms/buyer')->middleware('auth:buyer')->group(function () {
     Route::put('/order/{id}', [OrderController::class, 'update']);
     Route::delete('order/{id}', [OrderController::class, 'destroy']);
 
+
+    Route::get('/suggestion', [SuggestionController::class, 'index']);
+    Route::post('/suggestion/create', [SuggestionController::class, 'store']);
+    Route::put('/suggestion/{id}', [SuggestionController::class, 'update']);
+    Route::delete('suggestion/{id}', [SuggestionController::class, 'destroy']);
+
+
+
     Route::get('/logout', [BuyerController::class, 'logout']);
+});
+
+
+
+/*
+  |--------------------------------------------------------------------------
+  | Drivers Routes
+  |--------------------------------------------------------------------------
+  */
+
+
+Route::prefix('auth/')->group(function () {
+    Route::post('/driver/create', [DriverController::class, 'store']);
+
+    Route::post('driver/login', [AuthDriverController::class, 'login']);
+});
+
+Route::prefix('cms/driver/')->group(
+    function () {
+        Route::get('store', [StoreController::class, 'index']);
+    }
+);
+
+Route::prefix('cms/driver/')->middleware('auth:driver')->group(function () {
+    Route::get('order', [DriverControllerAll::class, 'order']);
+    Route::post('orderdetails/{id}', [DriverControllerAll::class, 'OrderDriver']);
+
+    Route::get('logout', [AuthDriverController::class, 'logout']);
 });

@@ -8,6 +8,31 @@ use Illuminate\Database\Eloquent\Model;
 class OrderDriver extends Model
 {
     use HasFactory;
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id', 'id');
+    }
+
+    public function productOrders()
+    {
+        return $this->hasMany(OrderProduct::class, 'product_id', 'id');
+    }
+
+    public function buyer()
+    {
+        return $this->belongsTo(Buyer::class, 'buyer_id', 'id');
+    }
+
+    public function orderDrivers()
+    {
+        return $this->hasMany(OrderDriver::class, 'order_id', 'id');
+    }
+
     public function driver()
     {
         return $this->belongsTo(Driver::class, 'driver_id', 'id');
@@ -15,16 +40,10 @@ class OrderDriver extends Model
 
     public function orderProduct()
     {
-        return $this->belongsTo(OrderProduct::class, 'order_product_id', 'id');
+        return $this->belongsTo(OrderProduct::class, 'order_id', 'id');
     }
 
-
-    public function order()
-    {
-        return $this->belongsTo(Order::class, 'order_product_id', 'id');
-    }
-
-    public function orderDriver()
+    public function DriveOrder()
     {
         return $this->hasMany(OrderDriver::class, 'driver_id', 'id');
     }
@@ -44,5 +63,7 @@ class OrderDriver extends Model
         'order_count',
         'updated_at',
         'driver_count',
+        'order_product_count',
+
     ];
 }
