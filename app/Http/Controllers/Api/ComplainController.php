@@ -3,48 +3,46 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Suggestion;
+use App\Models\Complain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
-class SuggestionController extends Controller
+class ComplainController extends Controller
 {
     //
-
     public function index(Request $request)
     {
 
-        $suggestions = Suggestion::withCount(['buyer'])
+        $complains = Complain::withCount(['buyer'])
             ->whereHas('buyer', function ($query) use ($request) {
                 $query->where('buyer_id', '=', $request->user()->id);
             })->get();
-        $suggestions->load('buyer');
+        $complains->load('buyer');
         return response()->json([
             'status' => true,
             'message' => "Success",
-            'data' => $suggestions,
+            'data' => $complains,
         ]);
     }
 
-    public function Store(Request $request, Suggestion $suggestions)
+    public function Store(Request $request, Complain $complains)
     {
         $validator = validator($request->all(), [
-            'titel' => 'required|string|min:3',
-            'subtitle' => 'required|string|min:5',
+            'titel' => 'required|string',
+            'subtitle' => 'required|string',
         ]);
         if (!$validator->fails()) {
-            $suggestions = new Suggestion();
-            $suggestions->titel = $request->input('titel');
-            $suggestions->subtitle = $request->input('subtitle');
+            $complains = new Complain();
+            $complains->titel = $request->input('titel');
+            $complains->subtitle = $request->input('subtitle');
             $buyer = Auth::guard('buyer')->user();
-            $suggestions->buyer_id = $buyer->id;
-            $isSaved = $suggestions->save();
+            $complains->buyer_id = $buyer->id;
+            $isSaved = $complains->save();
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'تم ارسال اقتراحك الى مدير المتجر ' : 'فشل ارسال الاقتراح'
+                    'message' => $isSaved ? 'تم ارسال شكوتك الخاصة الى مدير المتجر ' : 'فشل ارسال الاقتراح'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
@@ -58,7 +56,4 @@ class SuggestionController extends Controller
             );
         }
     }
-
-
-
 }

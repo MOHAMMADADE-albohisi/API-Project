@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Driver;
+use App\Models\OrderDriver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
@@ -101,5 +102,44 @@ class DriverController extends Controller
             $deleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
 
         );
+    }
+
+
+    public function order(Request $request)
+    {
+        $orderDriver = OrderDriver::withCount(['seller', 'orderProduct', 'driver'])
+            ->whereHas('driver', function ($query) use ($request) {
+                $query->where('driver_id', '=', $request->user()->id);
+            })->get();
+        $orderDriver->load('orderProduct');
+        $orderDriver->load('seller');
+        $orderDriver->load('driver');
+
+        return response()->json([
+            'status' => true,
+            'message' => "Success",
+            'data' => $orderDriver,
+        ]);
+    }
+
+
+
+    public function OrderDriver(Request $request, $id)
+    {
+        $orderdriver = OrderDriver::find($id);
+        $orderdriver = OrderDriver::withCount(['seller', 'orderProduct', 'driver'])
+            ->whereHas('driver', function ($query) use ($request) {
+                $query->where('driver_id', '=', $request->user()->id);
+            })->get();
+        $orderdriver->load('orderProduct');
+        $orderdriver->load('driver');
+        $orderdriver->load('product');
+        $orderdriver->load('buyer');
+        $orderdriver->load('store');
+        return response()->json([
+            'status' => true,
+            'message' => "Success",
+            'data' => $orderdriver,
+        ]);
     }
 }

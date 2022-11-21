@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Response;
 
-class BuyerController extends Controller
+class AuthBuyerController extends Controller
 {
     //
 
@@ -38,7 +38,7 @@ class BuyerController extends Controller
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => '4',
-                'client_secret' => 'NVuOhshvuMeNYq2xCLaZmQVqL9hcOljEn0vR424u',
+                'client_secret' => 'VoomqDlyyV17jSaZ5wd8UdyNICsYEBDEtqn0XszF',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*',

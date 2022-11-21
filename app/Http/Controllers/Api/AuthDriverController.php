@@ -36,7 +36,7 @@ class AuthDriverController extends Controller
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => '5',
-                'client_secret' => '8s3Yne5gUBAl7MJui5FCD6mepkdr7HFlQqHOlB8T',
+                'client_secret' => '2S8tNegjPSeN9Quk5PYqQ3ccd9WRODuB5TS2xaE0',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*'

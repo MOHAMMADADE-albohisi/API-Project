@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function index()
     {
 
-        $products =  Product::where('status', '=', 'Visible')->get();
+        $products =  Product::where('status', '=', 'Visible')->with('Category')->get();
         return response()->json([
             'status' => true,
             'message' => "Success",
@@ -25,6 +25,7 @@ class ProductController extends Controller
     public function Store(Request $request, Product $product)
     {
         $validator = validator($request->all(), [
+            'categorie_id' => 'required|numeric|exists:categories,id',
             'name' => 'required|string|min:3',
             'description' => 'required|string|min:5',
             'price' => 'required|numeric',
@@ -34,6 +35,7 @@ class ProductController extends Controller
         ]);
         if (!$validator->fails()) {
             $product = new Product();
+            $product->categorie_id = $request->input('categorie_id');
             $product->name = $request->input('name');
             $product->description = $request->input('description');
             $product->price = $request->input('price');
@@ -67,6 +69,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $validator = validator($request->all(), [
+            'categorie_id' => 'required|numeric|exists:categories,id',
             'name' => 'required|string|min:3',
             'description' => 'required|string|min:5',
             'price' => 'required|numeric',
@@ -75,6 +78,7 @@ class ProductController extends Controller
         ]);
 
         if (!$validator->fails()) {
+            $product->categorie_id = $request->input('categorie_id');
             $product->name = $request->input('name');
             $product->description = $request->input('description');
             $product->price = $request->input('price');
@@ -112,5 +116,17 @@ class ProductController extends Controller
             $deleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
 
         );
+    }
+
+
+
+    public function ProductDetails($id)
+    {
+        $product = Product::find($id);
+        return response()->json([
+            'status' => true,
+            'message' => "Success",
+            'data' => $product,
+        ]);
     }
 }

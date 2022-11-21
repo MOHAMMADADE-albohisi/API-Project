@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Complain;
 use App\Models\OrderProduct;
 use App\Models\Suggestion;
 use Illuminate\Http\Request;
@@ -29,15 +30,26 @@ class SellerController extends Controller
     }
 
 
-    public function Suggestion(Request $request, $id)
+    public function Suggestion(Request $request)
     {
-        $suggestions = Suggestion::find($id);
         $suggestions = Suggestion::withCount(['buyer'])->whereHas('buyer', function ($query) use ($request) {
             $query->where('buyer_id', '=', $request->user()->id);
         })->get();
 
         return response()->json([
             'data' => $suggestions,
+        ]);
+    }
+
+
+    public function Complain(Request $request)
+    {
+        $complain = Complain::withCount(['buyer'])->whereHas('buyer', function ($query) use ($request) {
+            $query->where('buyer_id', '=', $request->user()->id);
+        })->get();
+        $complain->load('buyer');
+        return response()->json([
+            'data' => $complain,
         ]);
     }
 }

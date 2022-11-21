@@ -10,6 +10,11 @@ class Product extends Model
 {
     use HasFactory;
 
+    public function Category()
+    {
+        return $this->belongsTo(Category::class, 'categorie_id', 'id');
+    }
+
 
     protected $appends = ['image_url'];
 

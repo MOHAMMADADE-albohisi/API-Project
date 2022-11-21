@@ -25,6 +25,12 @@ class Buyer extends Authenticatable
     }
 
 
+    public function Complain()
+    {
+        return $this->hasMany(Complain::class, 'buyer_id', 'id');
+    }
+
+
     public function store()
     {
         return $this->belongsTo(Store::class, 'store_id', 'id');
