@@ -37,7 +37,7 @@ class RegisterSellerController extends Controller
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'Seller created successfully' : 'Seller Create failed'
+                    'message' => $isSaved ? 'تم انشاء حساب البائع بنجاح' : 'فشل انشاء الحساب الخاص بلبائع'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );

@@ -16,6 +16,12 @@ return new class extends Migration
         Schema::create('order_products', function (Blueprint $table) {
             $table->id();
 
+            
+            $table->integer('count')->unsigned();
+            $table->float('item_price');
+
+            $table->foreignId('store_id');
+            $table->foreign('store_id')->references('id')->on('stores');
 
             $table->foreignId('order_id');
             $table->foreign('order_id')->references('id')->on('orders');
@@ -26,8 +32,7 @@ return new class extends Migration
             $table->foreignId('product_id');
             $table->foreign('product_id')->references('id')->on('products');
 
-            $table->integer('count')->unsigned();
-            $table->float('item_price');
+
             $table->timestamps();
         });
     }

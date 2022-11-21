@@ -23,7 +23,7 @@ class AuthController extends Controller
             return  $this->genaratePGCt($request);
         } else {
             return response()->json(
-                ['message' => 'Login Filed, chick your data!'],
+                ['message' => 'فشل تسجيل الدخول ، تحقق من بياناتك!'],
                 Response::HTTP_BAD_REQUEST,
             );
         }
@@ -36,7 +36,7 @@ class AuthController extends Controller
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => '3',
-                'client_secret' => 'xZLifOcYwhj7Bvi7v62g6VKXqOZwYvVRaaGgPAsl',
+                'client_secret' => 'hINOZLUKk7eUTa8DFzQYqWDuupV1r5ZrcJoyMszq',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*',
@@ -49,7 +49,7 @@ class AuthController extends Controller
             $seller->load('store');
             return response()->json([
                 'status' => true,
-                'message' => 'Logged in successfully',
+                'message' => 'تم تسجيل الدخول بنجاح',
                 'data' => $seller,
             ], Response::HTTP_OK);
         } catch (Exception $ex) {
@@ -70,7 +70,7 @@ class AuthController extends Controller
         $revoked = $token->revoke();
         return response()->json(
             [
-                'message' => $revoked ? 'Signed out successfully' : 'Logout failed',
+                'message' => $revoked ? 'تم تسجيل الخروج بنجاح' : 'فشل تسجيل الخروج',
             ],
             $revoked ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
         );

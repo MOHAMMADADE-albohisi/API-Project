@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name', 45);
             $table->string('description', 100);
             $table->float('price');
+            $table->string('image')->nullable();
             $table->enum('status', ['Visible', 'InVisible'])->default('Visible');
             $table->timestamps();
         });

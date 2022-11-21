@@ -25,7 +25,7 @@ class BuyerController extends Controller
             return  $this->genaratePGCt($request);
         } else {
             return response()->json(
-                ['message' => 'Login Filed, chick your data!'],
+                ['message' => 'فشل تسجيل الدخول ، تحقق من بياناتك!'],
                 Response::HTTP_BAD_REQUEST,
             );
         }
@@ -38,7 +38,7 @@ class BuyerController extends Controller
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => '4',
-                'client_secret' => 'vCTqvlbf9JyXeWDpGRQ7zHbKfRPKDHh6tXxmuC0w',
+                'client_secret' => 'NVuOhshvuMeNYq2xCLaZmQVqL9hcOljEn0vR424u',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*',
@@ -51,7 +51,7 @@ class BuyerController extends Controller
             $buyer->load('store');
             return response()->json([
                 'status' => true,
-                'message' => 'Logged in successfully',
+                'message' => 'تم تسجيل الدخول بنجاح',
                 'data' => $buyer,
             ], Response::HTTP_OK);
         } catch (Exception $ex) {
@@ -72,7 +72,7 @@ class BuyerController extends Controller
         $revoked = $token->revoke();
         return response()->json(
             [
-                'message' => $revoked ? 'Signed out successfully' : 'Logout failed',
+                'message' => $revoked ? 'تم تسجيل الخروج بنجاح' : 'فشل تسجيل الخروج',
             ],
             $revoked ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
         );
@@ -101,7 +101,7 @@ class BuyerController extends Controller
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'Seller created successfully' : 'Seller Create failed'
+                    'message' => $isSaved ? 'تم إنشاء حسابك  بنجاح' : 'فشل إنشاء مشتري'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );

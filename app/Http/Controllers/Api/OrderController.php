@@ -45,7 +45,6 @@ class OrderController extends Controller
             $order = new Order();
             $order->total = $request->input('total');
             $order->payment_type = $request->input('payment_type');
-            $order->payment_type = $request->input('payment_type');
             $isSaved = $order->save();
             if ($isSaved) {
                 $orderProduct = new OrderProduct();
@@ -61,7 +60,7 @@ class OrderController extends Controller
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'Order created successfully' : 'Order Create failed'
+                    'message' => $isSaved ? 'تم إنشاء الطلب بنجاح' : 'فشل إنشاء الطلب'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
@@ -83,11 +82,11 @@ class OrderController extends Controller
 
     public function destroy($id)
     {
-        $order = Order::find($id);
+        $order = OrderProduct::find($id);
         $deleted = $order->delete();
         return response()->json(
             [
-                'message' => $deleted ? 'Deleted successfully' : 'Deleted failled ',
+                'message' => $deleted ? 'تم حدف الطلب بنجاح' : 'فشل حدف الطلب',
             ],
             $deleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
 

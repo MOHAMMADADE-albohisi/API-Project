@@ -44,7 +44,7 @@ class SuggestionController extends Controller
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'Suggestion created successfully' : 'Suggestion Create failed'
+                    'message' => $isSaved ? 'تم ارسال اقتراحك الى مدير المتجر ' : 'فشل ارسال الاقتراح'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
@@ -76,7 +76,7 @@ class SuggestionController extends Controller
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'Suggestion Update successfully' : 'Suggestion Update failed'
+                    'message' => $isSaved ? 'تم تعديل اقتراحك بنجاح' : 'فشل عمليه التعديل'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
@@ -98,7 +98,7 @@ class SuggestionController extends Controller
         $deleted = $suggestions->delete();
         return response()->json(
             [
-                'message' => $deleted ? 'Deleted successfully' : 'Deleted failled ',
+                'message' => $deleted ? 'تم حدف اقتراحك' : 'فشلت عمليه حدف الاقتراح ',
             ],
             $deleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
 

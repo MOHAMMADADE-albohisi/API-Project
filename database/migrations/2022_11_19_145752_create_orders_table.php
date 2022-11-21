@@ -19,8 +19,6 @@ return new class extends Migration
             $table->enum('payment_type', ['Cash', 'Online']);
             $table->enum('payment_status', ['Paid', 'Waiting']);
             $table->enum('status', ['Waiting', 'Processing', 'Delivered', 'Canceled', 'Rejected'])->default('Waiting');
-            $table->unsignedBigInteger('buyer_id');
-            $table->foreign('buyer_id')->references('id')->on('buyers');
             $table->timestamps();
         });
     }

@@ -29,6 +29,7 @@ class ProductController extends Controller
             'description' => 'required|string|min:5',
             'price' => 'required|numeric',
             'status' => 'required|string|in:Visible,InVisible',
+            'image' => 'required|image|mimes:jpg,png',
 
         ]);
         if (!$validator->fails()) {
@@ -37,11 +38,16 @@ class ProductController extends Controller
             $product->description = $request->input('description');
             $product->price = $request->input('price');
             $product->status = $request->input('status');
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_' . str_replace(' ', '', $product->name) . '.' . $request->file('image')->extension();
+                $request->file('image')->storePubliclyAs('product', $imageName, ['disk' => 'public']);
+                $product->image = 'product/' . $imageName;
+            }
             $isSaved = $product->save();
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'Product created successfully' : 'Product Create failed'
+                    'message' => $isSaved ? 'تم اضافة منتج جديد الى المتجر الخاص بك' : 'فشل في اضافة المنتج'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
@@ -65,6 +71,7 @@ class ProductController extends Controller
             'description' => 'required|string|min:5',
             'price' => 'required|numeric',
             'status' => 'required|string|in:Visible,InVisible',
+            'image' => 'nullable', '|image|mimes:jpg,png',
         ]);
 
         if (!$validator->fails()) {
@@ -72,9 +79,14 @@ class ProductController extends Controller
             $product->description = $request->input('description');
             $product->price = $request->input('price');
             $product->status = $request->input('status');
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_' . str_replace(' ', '', $product->name) . '.' . $request->file('image')->extension();
+                $request->file('image')->storePubliclyAs('product', $imageName, ['disk' => 'public']);
+                $product->image = 'product/' . $imageName;
+            }
             $isSaved = $product->save();
             return response()->json(
-                ['message' => $isSaved ? ' update Driver successfully' : ' update Driver failed'],
+                ['message' => $isSaved ? ' تم تحديث المنتج بنجاح' : 'لم يتم تحديث المنتج'],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
         } else {
@@ -95,7 +107,7 @@ class ProductController extends Controller
         $deleted = $product->delete();
         return response()->json(
             [
-                'message' => $deleted ? 'Deleted successfully' : 'Deleted failled ',
+                'message' => $deleted ? 'تم حدف المنتج الخاص بك' : 'فشلت عملية حدف المنتج!',
             ],
             $deleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
 

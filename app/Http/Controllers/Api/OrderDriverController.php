@@ -51,16 +51,20 @@ class OrderDriverController extends Controller
             $orderdriver->buyer_id = $request->input('buyer_id');
             $orderdriver->product_id = $request->input('product_id');
             $orderdriver->store_id = $request->input('store_id');
-
             $seller = Auth::guard('seller')->user();
             $orderdriver->seller_id = $seller->id;
             $orderdriver->driver_id = $request->input('driver_id');
             $isSaved = $orderdriver->save();
+            if ($isSaved) {
+                $order = Order::where('id', $request->get('order_id'))->first();
+                $order->status = 'Processing';
+                $order->save();
+            }
 
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'Order created successfully' : 'Order Create failed'
+                    'message' => $isSaved ? 'تم ارسال الطلب الى السائق' : 'لم يتم ارسال الطلب'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );

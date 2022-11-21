@@ -24,7 +24,7 @@ class AuthDriverController extends Controller
             return  $this->generatePGCT($request);
         } else {
             return response()->json(
-                ['message' => 'Login Filed, chick your data!'],
+                ['message' => 'فشل تسجيل الدخول ، تحقق من بياناتك!'],
                 Response::HTTP_BAD_REQUEST,
             );
         }
@@ -36,7 +36,7 @@ class AuthDriverController extends Controller
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => '5',
-                'client_secret' => 'G8y5w2sM6yHy9rFD7A1HDngJWItKqfCQSnaS7eVc',
+                'client_secret' => '8s3Yne5gUBAl7MJui5FCD6mepkdr7HFlQqHOlB8T',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*'
@@ -46,7 +46,7 @@ class AuthDriverController extends Controller
             $drivers->setAttribute('token', $decodedResponse->access_token);
             return response()->json([
                 'status' => true,
-                'message' => 'Logged in successfully',
+                'message' => 'تم تسجيل الدخول بنجاح',
                 'data' => $drivers,
             ], Response::HTTP_OK);
         } catch (Exception $ex) {
@@ -66,12 +66,9 @@ class AuthDriverController extends Controller
         $revoked = $token->revoke();
         return response()->json(
             [
-                'message' => $revoked ? 'Signed out successfully' : 'Logout failed',
+                'message' => $revoked ? 'تم تسجيل الخروج بنجاح' : 'فشل تسجيل الخروج',
             ],
             $revoked ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
         );
     }
-
-
-
 }

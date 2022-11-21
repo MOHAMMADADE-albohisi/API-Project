@@ -39,6 +39,7 @@ class OrderProduct extends Model
         return $this->belongsTo(Store::class, 'store_id', 'id');
     }
 
-
-
+    protected $hidden = [
+        'updated_at',
+    ];
 }

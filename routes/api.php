@@ -58,7 +58,7 @@ Route::prefix('cms/admin')->middleware('auth:seller')->group(function () {
 
     Route::get('/product', [ProductController::class, 'index']);
     Route::post('/product/create', [ProductController::class, 'store']);
-    Route::put('/product/{id}', [ProductController::class, 'update']);
+    Route::post('/product/{id}', [ProductController::class, 'update']);
     Route::delete('product/{id}', [ProductController::class, 'destroy']);
 
 
@@ -70,10 +70,12 @@ Route::prefix('cms/admin')->middleware('auth:seller')->group(function () {
     Route::post('/Products/{id}', [SellerController::class, 'Update']);
 
 
-
-
     Route::get('/OrderDriver', [OrderDriverController::class, 'index']);
     Route::post('/OrderDriver/create', [OrderDriverController::class, 'store']);
+
+
+    Route::get('/suggestion', [SellerController::class, 'Suggestion']);
+
 
 
 

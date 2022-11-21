@@ -38,7 +38,7 @@ class StoreController extends Controller
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'Store created successfully' : 'Store Create failed'
+                    'message' => $isSaved ? 'تم إنشاء المتجر بنجاح' : 'فشل إنشاء المتجر'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
@@ -69,7 +69,7 @@ class StoreController extends Controller
             $store->active = $request->input('active');
             $isSaved = $store->save();
             return response()->json(
-                ['message' => $isSaved ? ' update Store successfully' : ' update Store failed'],
+                ['message' => $isSaved ? 'تم التعديل بنجاح' : 'فشل التعديل'],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
         } else {
@@ -90,7 +90,7 @@ class StoreController extends Controller
         $deleted = $store->delete();
         return response()->json(
             [
-                'message' => $deleted ? 'Deleted successfully' : 'Deleted failled ',
+                'message' => $deleted ? 'تم حذف المتجر بنجاح' : 'فشل الحذف ',
             ],
             $deleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
 

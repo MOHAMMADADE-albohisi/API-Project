@@ -43,7 +43,7 @@ class DriverController extends Controller
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'Driver created successfully' : 'Driver Create failed'
+                    'message' => $isSaved ? 'تم إنشاء حساب السائق بنجاح' : 'فشل إنشاء حساب السائق'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
@@ -76,7 +76,7 @@ class DriverController extends Controller
             $driver->mobile = $request->input('mobile');
             $isSaved = $driver->save();
             return response()->json(
-                ['message' => $isSaved ? ' update Driver successfully' : ' update Driver failed'],
+                ['message' => $isSaved ? 'تم تحديث حساب السائق بنجاح' : 'فشل تحديث حساب السائق  '],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
         } else {
@@ -96,7 +96,7 @@ class DriverController extends Controller
         $deleted = $product->delete();
         return response()->json(
             [
-                'message' => $deleted ? 'Deleted successfully' : 'Deleted failled ',
+                'message' => $deleted ? 'تم حذف حساب السائق بنجاح' : 'فشل الحذف ',
             ],
             $deleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
 
