@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Seller;
 use Exception;
+// use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash as FacadesHash;
+use Illuminate\Validation\Rules\Password;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthSellerController extends Controller
@@ -117,4 +119,38 @@ class AuthSellerController extends Controller
             );
         }
     }
+
+
+    public function changePassword(Request $request)
+    {
+        //
+        $guard = session('guard');
+        $guard = auth($guard)->check() ? $guard : null;
+        $validator = validator($request->all(), [
+            'password' => 'required|current_password:' . $guard,
+            'new_password' => [
+                'required', 'string', Password::min(6)
+                    ->letters()
+                    ->symbols()
+                    ->numbers()
+                    ->mixedCase()
+                    ->uncompromised()
+            ]
+        ]);
+
+        if (!$validator->fails()) {
+            $changePassword = $request->user();
+            $changePassword->forceFill([
+                'password' => Hash::make($request->input('new_password')),
+            ]);
+            $isSaved = $changePassword->save();
+            return response()->json(
+                ['message' => $isSaved ? 'تم تغير كلمة المرور بنجاح' : 'فشلت عملية تغير كلمة المرور'],
+                $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+            );
+        } else {
+            return response()->json(['message' => $validator->getMessageBag()->first()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthBuyerController;
 use App\Http\Controllers\Api\CategorieController;
 use App\Http\Controllers\Api\ComplainController;
 use App\Http\Controllers\Api\DriverController;
+use App\Http\Controllers\Api\ForgetPassword;
 use App\Http\Controllers\Api\HomeBuyerController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderDriverController;
@@ -46,6 +47,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('auth/')->group(function () {
     Route::post('seller/login', [AuthSellerController::class, 'login']);
 
+    Route::post('forgot-Password', [ForgetPassword::class, 'forgotPasswordSeller']);
+    Route::post('reset-Passwrod', [ForgetPassword::class, 'resetPasswordSeller']);
     Route::post('seller/RegisterSeller', [AuthSellerController::class, 'store']);
 });
 Route::prefix('cms/admin/')->group(
@@ -74,6 +77,8 @@ Route::prefix('cms/admin/')->middleware('auth:seller')->group(function () {
     Route::get('suggestion', [SellerController::class, 'Suggestion']);
     Route::get('complain', [SellerController::class, 'Complain']);
     Route::get('sale', [SaleController::class, 'index']);
+
+    Route::post('/changePassword', [AuthSellerController::class, 'changePassword']);
     Route::get('logout', [AuthSellerController::class, 'logout']);
 });
 
@@ -86,6 +91,8 @@ Route::prefix('cms/admin/')->middleware('auth:seller')->group(function () {
 
 Route::prefix('auth/')->group(function () {
     Route::post('buyer/login', [AuthBuyerController::class, 'login']);
+    Route::post('buyer/forgot-Password', [ForgetPassword::class, 'forgotPasswordBuyer']);
+    Route::post('buyer/reset-Passwrod', [ForgetPassword::class, 'resetPasswordBuyer']);
     Route::post('buyer/RegisterBuyer', [AuthBuyerController::class, 'store']);
     Route::get('store', [StoreController::class, 'index']);
 });
@@ -109,6 +116,7 @@ Route::prefix('cms/buyer/')->middleware('auth:buyer')->group(function () {
     Route::post('suggestion/create', [SuggestionController::class, 'store']);
     Route::get('complain', [ComplainController::class, 'index']);
     Route::post('complain/create', [ComplainController::class, 'store']);
+    Route::post('/changePassword', [AuthSellerController::class, 'changePassword']);
     Route::get('logout', [AuthBuyerController::class, 'logout']);
 });
 
@@ -123,6 +131,8 @@ Route::prefix('cms/buyer/')->middleware('auth:buyer')->group(function () {
 
 Route::prefix('auth/')->group(function () {
     Route::post('driver/create', [DriverController::class, 'store']);
+    Route::post('driver/forgot-Password', [ForgetPassword::class, 'forgotPasswordDriver']);
+    Route::post('driver/reset-Passwrod', [ForgetPassword::class, 'resetPasswordDriver']);
     Route::post('driver/login', [AuthDriverController::class, 'login']);
 });
 
@@ -135,7 +145,9 @@ Route::prefix('cms/driver/')->group(
 Route::prefix('cms/driver/')->middleware('auth:driver')->group(function () {
     Route::get('order', [DriverController::class, 'order']);
     Route::post('orderdetails/{id}', [DriverController::class, 'OrderDriver']);
-    Route::get('logout', [AuthDriverController::class, 'logout']);
-
     Route::post('sale/create', [SaleController::class, 'Store']);
+
+
+    Route::post('/changePassword', [AuthSellerController::class, 'changePassword']);
+    Route::get('logout', [AuthDriverController::class, 'logout']);
 });

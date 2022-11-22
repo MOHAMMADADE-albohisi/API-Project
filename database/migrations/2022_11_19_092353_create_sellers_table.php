@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('mobile');
             $table->string('address');
             $table->string('password');
+            $table->string('verificcation_code')->nullable();
             $table->foreignId('store_id')->constrained();
             $table->timestamps();
         });
