@@ -39,12 +39,16 @@ class OrderController extends Controller
             'count' => 'required|numeric',
             'item_price' => 'required|numeric',
             'product' => 'required|numeric|exists:products,id',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
 
         ]);
         if (!$validator->fails()) {
             $order = new Order();
             $order->total = $request->input('total');
             $order->payment_type = $request->input('payment_type');
+            $order->latitude = $request->input('latitude');
+            $order->longitude = $request->input('longitude');
             $isSaved = $order->save();
             if ($isSaved) {
                 $orderProduct = new OrderProduct();
@@ -60,7 +64,7 @@ class OrderController extends Controller
             return response()->json(
                 [
 
-                    'message' => $isSaved ? 'تم إنشاء الطلب بنجاح' : 'فشل إنشاء الطلب'
+                    'message' => $isSaved ? 'تم أرسال الطلب بنجاح' : 'فشل إنشاء الطلب'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );

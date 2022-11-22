@@ -13,7 +13,7 @@ class Order extends Model
     {
         return $this->belongsTo(Buyer::class, 'buyer_id', 'id');
     }
-    
+
 
 
     public function orderDetails()
@@ -25,6 +25,11 @@ class Order extends Model
     public function OrderDriver()
     {
         return $this->hasMany(OrderDriver::class, 'order_id', 'id');
+    }
+
+    public function Sale()
+    {
+        return $this->hasMany(Sale::class, 'order_id', 'id');
     }
 
 

@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderDriverController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RegisterSellerController;
+use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\SellerController;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\SuggestionController;
@@ -72,6 +73,7 @@ Route::prefix('cms/admin/')->middleware('auth:seller')->group(function () {
     Route::post('OrderDriver/create', [OrderDriverController::class, 'store']);
     Route::get('suggestion', [SellerController::class, 'Suggestion']);
     Route::get('complain', [SellerController::class, 'Complain']);
+    Route::get('sale', [SaleController::class, 'index']);
     Route::get('logout', [AuthSellerController::class, 'logout']);
 });
 
@@ -134,4 +136,6 @@ Route::prefix('cms/driver/')->middleware('auth:driver')->group(function () {
     Route::get('order', [DriverController::class, 'order']);
     Route::post('orderdetails/{id}', [DriverController::class, 'OrderDriver']);
     Route::get('logout', [AuthDriverController::class, 'logout']);
+
+    Route::post('sale/create', [SaleController::class, 'Store']);
 });

@@ -37,6 +37,11 @@ class Buyer extends Authenticatable
     }
 
 
+    public function Sale()
+    {
+        return $this->hasMany(Sale::class, 'buyer_id', 'id');
+    }
+
     protected $hidden = [
         'password',
         'remember_token',

@@ -21,6 +21,11 @@ class Seller extends Authenticatable
         return $this->hasMany(OrderDriver::class, 'seller_id', 'id');
     }
 
+    public function Sale()
+    {
+        return $this->hasMany(Sale::class, 'seller_id', 'id');
+    }
+
 
     protected $hidden = [
         'password',

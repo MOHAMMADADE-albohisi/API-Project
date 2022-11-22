@@ -15,6 +15,11 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'categorie_id', 'id');
     }
 
+    public function Sale()
+    {
+        return $this->hasMany(Sale::class, 'product_id', 'id');
+    }
+
 
     protected $appends = ['image_url'];
 

@@ -112,8 +112,6 @@ class DriverController extends Controller
                 $query->where('driver_id', '=', $request->user()->id);
             })->get();
         $orderDriver->load('orderProduct');
-        $orderDriver->load('seller');
-        $orderDriver->load('driver');
 
         return response()->json([
             'status' => true,

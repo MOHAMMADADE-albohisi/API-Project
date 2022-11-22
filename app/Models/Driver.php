@@ -23,6 +23,11 @@ class Driver extends Authenticatable
         return $this->hasMany(OrderDriver::class, 'driver_id', 'id');
     }
 
+    public function Sale()
+    {
+        return $this->hasMany(Sale::class, 'driver_id', 'id');
+    }
+
     protected $hidden = [
         'password',
         'updated_at',
