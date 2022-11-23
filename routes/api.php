@@ -106,7 +106,8 @@ Route::prefix('cms/buyer/')->group(
 Route::prefix('cms/buyer/')->middleware('auth:buyer')->group(function () {
 
     Route::get('', [HomeBuyerController::class, 'index']);
-    Route::post('product/{id}', [ProductController::class, 'ProductDetails']);
+    Route::post('serch/{name}', [HomeBuyerController::class, 'serchApi']);
+    Route::post('category/{id}', [ProductController::class, 'CategoryDetails']);
     Route::get('driver', [DriverController::class, 'index']);
     Route::get('order', [OrderController::class, 'index']);
     Route::post('order/create', [OrderController::class, 'store']);

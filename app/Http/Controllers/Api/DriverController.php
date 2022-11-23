@@ -122,22 +122,26 @@ class DriverController extends Controller
 
 
 
-    public function OrderDriver(Request $request, $id)
+    public function OrderDriver($id)
     {
         $orderdriver = OrderDriver::find($id);
-        $orderdriver = OrderDriver::withCount(['seller', 'orderProduct', 'driver'])
-            ->whereHas('driver', function ($query) use ($request) {
-                $query->where('driver_id', '=', $request->user()->id);
-            })->get();
-        $orderdriver->load('orderProduct');
-        $orderdriver->load('driver');
-        $orderdriver->load('product');
-        $orderdriver->load('buyer');
-        $orderdriver->load('store');
-        return response()->json([
-            'status' => true,
-            'message' => "Success",
-            'data' => $orderdriver,
-        ]);
+        if ($orderdriver !== null) {
+            $orderdriver->load('orderProduct');
+            $orderdriver->load('driver');
+            $orderdriver->load('product');
+            $orderdriver->load('buyer');
+            $orderdriver->load('store');
+            return response()->json([
+                'status' => true,
+                'message' => "Success",
+                'data' => $orderdriver,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "Fali",
+                'data' => 'عذا لا يوجد طلب بهدا الاسم',
+            ]);
+        }
     }
 }
