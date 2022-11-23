@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Passport\HasApiTokens;
 
 class Buyer extends Authenticatable
@@ -41,11 +42,19 @@ class Buyer extends Authenticatable
     {
         return $this->hasMany(Sale::class, 'buyer_id', 'id');
     }
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return Storage::url($this->image);
+    }
 
     protected $hidden = [
         'password',
         'remember_token',
         'updated_at',
+        'verificcation_code',
         'email_verified_at',
+        'image',
     ];
 }

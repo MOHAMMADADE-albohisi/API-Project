@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('password');
             $table->string('verificcation_code')->nullable();
+            $table->string('image')->nullable();
             $table->string('mobile');
             $table->foreignId('store_id')->constrained();
             $table->timestamps();

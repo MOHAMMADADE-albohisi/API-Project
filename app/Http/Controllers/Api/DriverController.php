@@ -12,10 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 class DriverController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
-        $drivers =  Driver::all();
+        $drivers = Driver::withCount(['stroe', 'Sale', 'orderDriver'])->whereHas('stroe', function ($query) use ($request) {
+            $query->where('store_id', '=', $request->user()->store_id);
+        })->get();
         $drivers->load('stroe');
+        $drivers->load('Sale');
         return response()->json([
             'status' => true,
             'message' => "Success",
@@ -31,6 +34,7 @@ class DriverController extends Controller
             'email' =>  'required|string|unique:drivers',
             'mobile' => 'required|string',
             'password' => 'required|string|min:3',
+            'image' => 'required|image|mimes:jpg,png',
 
         ]);
         if (!$validator->fails()) {
@@ -40,6 +44,11 @@ class DriverController extends Controller
             $driver->email = $request->input('email');
             $driver->mobile = $request->input('mobile');
             $driver->password = Hash::make($request->input('password'));
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_' . str_replace(' ', '', $driver->name) . '.' . $request->file('image')->extension();
+                $request->file('image')->storePubliclyAs('driver', $imageName, ['disk' => 'public']);
+                $driver->image = 'driver/' . $imageName;
+            }
             $isSaved = $driver->save();
             return response()->json(
                 [
@@ -62,12 +71,15 @@ class DriverController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $driver = Driver::find($id);
         $validator = validator($request->all(), [
             'store_id' => 'required|numeric|exists:stores,id',
             'full_name' => 'required|string|min:3',
             'email' =>  'required|string',
             'mobile' => 'required|string',
+            'image' => 'required|image|mimes:jpg,png',
+
         ]);
 
         if (!$validator->fails()) {
@@ -75,6 +87,11 @@ class DriverController extends Controller
             $driver->full_name = $request->input('full_name');
             $driver->email = $request->input('email');
             $driver->mobile = $request->input('mobile');
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_' . str_replace(' ', '', $driver->name) . '.' . $request->file('image')->extension();
+                $request->file('image')->storePubliclyAs('driver', $imageName, ['disk' => 'public']);
+                $driver->image = 'driver/' . $imageName;
+            }
             $isSaved = $driver->save();
             return response()->json(
                 ['message' => $isSaved ? 'تم تحديث حساب السائق بنجاح' : 'فشل تحديث حساب السائق  '],
@@ -122,9 +139,12 @@ class DriverController extends Controller
 
 
 
-    public function OrderDriver($id)
+    public function OrderDriver(Request $request, $id)
     {
-        $orderdriver = OrderDriver::find($id);
+        $orderdriver = OrderDriver::with('driver')->whereHas('store', function ($query) use ($request) {
+            $query->where('store_id', '=', $request->user()->id);
+        })->get();
+        // $orderdriver = OrderDriver::find($id);
         if ($orderdriver !== null) {
             $orderdriver->load('orderProduct');
             $orderdriver->load('driver');
@@ -139,7 +159,7 @@ class DriverController extends Controller
         } else {
             return response()->json([
                 'status' => false,
-                'message' => "Fali",
+                'message' => "Fail",
                 'data' => 'عذا لا يوجد طلب بهدا الاسم',
             ]);
         }

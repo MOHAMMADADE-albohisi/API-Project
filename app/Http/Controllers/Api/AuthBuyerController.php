@@ -38,7 +38,7 @@ class AuthBuyerController extends Controller
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => '4',
-                'client_secret' => 'Zgz8MLxHpmZvU20hpK8tG7LJPeISlUyEslIuBT3r',
+                'client_secret' => 'gnpxGIuoxOui5yYy1b0MlC6h7XxntGULIor14oy5',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*',
@@ -85,9 +85,11 @@ class AuthBuyerController extends Controller
         $validator = validator($request->all(), [
             'store_id' => 'required|numeric|exists:stores,id',
             'name' => 'required|string|min:3',
-            'email' =>  'required|string|unique:sellers',
+            'email' =>  'required|string|unique:buyers',
             'mobile' => 'required|numeric',
             'password' => 'required|string|min:3',
+            'image' => 'required|image|mimes:jpg,png',
+
 
         ]);
         if (!$validator->fails()) {
@@ -96,12 +98,75 @@ class AuthBuyerController extends Controller
             $buyer->name = $request->input('name');
             $buyer->email = $request->input('email');
             $buyer->mobile = $request->input('mobile');
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_' . str_replace(' ', '', $buyer->name) . '.' . $request->file('image')->extension();
+                $request->file('image')->storePubliclyAs('buyer', $imageName, ['disk' => 'public']);
+                $buyer->image = 'buyer/' . $imageName;
+            }
             $buyer->password = Hash::make($request->input('password'));
             $isSaved = $buyer->save();
             return response()->json(
                 [
 
                     'message' => $isSaved ? 'تم إنشاء حسابك  بنجاح' : 'فشل إنشاء مشتري'
+                ],
+                $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+            );
+        } else {
+            return response()->json(
+                [
+                    'message' => $validator->getMessageBag()->first()
+                ],
+                Response::HTTP_BAD_REQUEST
+
+            );
+        }
+    }
+
+
+    public function profiel($id)
+    {
+        if ($buyers = Buyer::find($id)) {
+            return response()->json([
+                'stuts' => true,
+                'message' => 'Success',
+                'data' => $buyers,
+            ]);
+        } else {
+            return response()->json([
+                'stuts' => false,
+                'message' => 'Fail',
+                'data' => 'عذرا لا يوجد حساب بهذا المعرف',
+            ]);
+        }
+    }
+
+
+    public function EditProfiel(Request $request, Buyer $buyer, $id)
+    {
+        $buyer = Buyer::find($id);
+        $validator = validator($request->all(), [
+            'store_id' => 'required|numeric|exists:stores,id',
+            'name' => 'required|string|min:3',
+            'email' =>  'required|string',
+            'mobile' => 'required|numeric',
+            'image' => 'required|image|mimes:jpg,png',
+        ]);
+        if (!$validator->fails()) {
+            $buyer->store_id = $request->input('store_id');
+            $buyer->name = $request->input('name');
+            $buyer->email = $request->input('email');
+            $buyer->mobile = $request->input('mobile');
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_' . str_replace(' ', '', $buyer->name) . '.' . $request->file('image')->extension();
+                $request->file('image')->storePubliclyAs('buyer', $imageName, ['disk' => 'public']);
+                $buyer->image = 'buyer/' . $imageName;
+            }
+            $isSaved = $buyer->save();
+            return response()->json(
+                [
+
+                    'message' => $isSaved ? 'تم تحرير ملف الشخصي بنجاح' : 'فشل تحديث الحساب'
                 ],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );

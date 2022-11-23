@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('name', 45);
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('verificcation_code');
+            $table->string('verificcation_code')->nullable();
+            $table->string('image')->nullable();
             $table->integer('mobile');
             $table->foreignId('store_id')->constrained();
             $table->timestamps();

@@ -68,7 +68,7 @@ Route::prefix('cms/admin/')->middleware('auth:seller')->group(function () {
     Route::delete('product/{id}', [ProductController::class, 'destroy']);
     Route::get('driver', [DriverController::class, 'index']);
     Route::post('driver/create', [DriverController::class, 'store']);
-    Route::put('driver/{id}', [DriverController::class, 'update']);
+    Route::post('driver/{id}', [DriverController::class, 'update']);
     Route::delete('driver/{id}', [DriverController::class, 'destroy']);
     Route::get('orderProducts', [SellerController::class, 'OrderProducts']);
     Route::post('Products/{id}', [SellerController::class, 'Update']);
@@ -77,6 +77,9 @@ Route::prefix('cms/admin/')->middleware('auth:seller')->group(function () {
     Route::get('suggestion', [SellerController::class, 'Suggestion']);
     Route::get('complain', [SellerController::class, 'Complain']);
     Route::get('sale', [SaleController::class, 'index']);
+
+    Route::post('profiel/{id}', [AuthSellerController::class, 'profiel']);
+    Route::post('editProfiel/{id}', [AuthSellerController::class, 'EditProfiel']);
 
     Route::post('/changePassword', [AuthSellerController::class, 'changePassword']);
     Route::get('logout', [AuthSellerController::class, 'logout']);
@@ -105,7 +108,7 @@ Route::prefix('cms/buyer/')->group(
 
 Route::prefix('cms/buyer/')->middleware('auth:buyer')->group(function () {
 
-    Route::get('', [HomeBuyerController::class, 'index']);
+    Route::get('/', [HomeBuyerController::class, 'index']);
     Route::post('serch/{name}', [HomeBuyerController::class, 'serchApi']);
     Route::post('category/{id}', [ProductController::class, 'CategoryDetails']);
     Route::get('driver', [DriverController::class, 'index']);
@@ -118,6 +121,10 @@ Route::prefix('cms/buyer/')->middleware('auth:buyer')->group(function () {
     Route::get('complain', [ComplainController::class, 'index']);
     Route::post('complain/create', [ComplainController::class, 'store']);
     Route::post('/changePassword', [AuthSellerController::class, 'changePassword']);
+
+    Route::post('profiel/{id}', [AuthBuyerController::class, 'profiel']);
+    Route::post('editProfiel/{id}', [AuthBuyerController::class, 'EditProfiel']);
+
     Route::get('logout', [AuthBuyerController::class, 'logout']);
 });
 
@@ -150,5 +157,8 @@ Route::prefix('cms/driver/')->middleware('auth:driver')->group(function () {
 
 
     Route::post('/changePassword', [AuthSellerController::class, 'changePassword']);
+
+    Route::post('profiel/{id}', [AuthDriverController::class, 'profiel']);
+    Route::post('editProfiel/{id}', [AuthDriverController::class, 'EditProfiel']);
     Route::get('logout', [AuthDriverController::class, 'logout']);
 });

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('full_name', 50);
             $table->string('email')->uniqid();
             $table->integer('mobile');
+            $table->string('image')->nullable();
             $table->string('address');
             $table->string('password');
             $table->string('verificcation_code')->nullable();

@@ -36,7 +36,7 @@ class AuthDriverController extends Controller
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => '5',
-                'client_secret' => 'Xa9IxLLXYwGAbnarYozVhyHNlJCYeEFE9nSJkcJ4',
+                'client_secret' => 'F98z3vLxfiZp2TOoS2K3mZFXyi9K4ruNDYaaChLs',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*'
@@ -70,5 +70,65 @@ class AuthDriverController extends Controller
             ],
             $revoked ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
         );
+    }
+
+
+    public function profiel($id)
+    {
+
+        if ($drivers = Driver::find($id)) {
+            return response()->json([
+                'stuts' => true,
+                'message' => 'Success',
+                'data' => $drivers,
+            ]);
+        } else {
+            return response()->json([
+                'stuts' => false,
+                'message' => 'Fail',
+                'data' => 'عذرا لا يوجد حساب بهذا المعرف',
+            ]);
+        }
+    }
+
+
+    public function EditProfiel(Request $request, Driver $driver, $id)
+    {
+        $driver = Driver::find($id);
+        $validator = validator($request->all(), [
+            'store_id' => 'required|numeric|exists:stores,id',
+            'full_name' => 'required|string|min:3',
+            'email' =>  'required|string',
+            'mobile' => 'required|string',
+            'image' => 'required|image|mimes:jpg,png',
+
+        ]);
+        if (!$validator->fails()) {
+            $driver->store_id = $request->input('store_id');
+            $driver->full_name = $request->input('full_name');
+            $driver->email = $request->input('email');
+            $driver->mobile = $request->input('mobile');
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_' . str_replace(' ', '', $driver->name) . '.' . $request->file('image')->extension();
+                $request->file('image')->storePubliclyAs('driver', $imageName, ['disk' => 'public']);
+                $driver->image = 'driver/' . $imageName;
+            }
+            $isSaved = $driver->save();
+            return response()->json(
+                [
+
+                    'message' => $isSaved ? 'تم تحرير ملف التعريف بنجاح' : 'فشل تحرير ملف التعريف'
+                ],
+                $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+            );
+        } else {
+            return response()->json(
+                [
+                    'message' => $validator->getMessageBag()->first()
+                ],
+                Response::HTTP_BAD_REQUEST
+
+            );
+        }
     }
 }

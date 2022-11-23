@@ -38,7 +38,7 @@ class SaleController extends Controller
             'product_id' => 'required|numeric|exists:products,id',
             'seller_id' => 'required|numeric|exists:sellers,id',
             'buyer_id' => 'required|numeric|exists:buyers,id',
-            'order_id' => 'required|numeric|exists:orders,id',
+            'order_id' => 'required|numeric|exists:order_drivers,id',
         ]);
         if (!$validator->fails()) {
             $sales = new Sale();

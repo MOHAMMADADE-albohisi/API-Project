@@ -9,9 +9,11 @@ use Illuminate\Http\Request;
 class HomeBuyerController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $products = Product::where('status', '=', 'Visible')->with('Category')->whereHas('Category', function ($query) use ($request) {
+            $query->where('categorie_id', '=', $request->user()->id);
+        })->get();
         return response()->json([
             'status' => true,
             'message' => "Success",
@@ -19,9 +21,12 @@ class HomeBuyerController extends Controller
         ]);
     }
 
-    public function serchApi($name)
+    public function serchApi(Request $request, $name)
     {
-        $products = Product::where("name", "like", "%" . $name . "%")->get();
+        $products = Product::where('status', '=', 'Visible')->where("name", "like", "%" . $name . "%")
+            ->with('Category')->whereHas('Category', function ($query) use ($request) {
+                $query->where('categorie_id', '=', $request->user()->id);
+            })->get();
         if ($products !== null) {
             return response()->json([
                 'status' => true,

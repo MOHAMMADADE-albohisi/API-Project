@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title', 45);
             $table->string('description', 100);
             $table->enum('status', ['Visible', 'InVisible'])->default('Visible');
+            $table->foreignId('store_id')->constrained();
             $table->timestamps();
         });
     }

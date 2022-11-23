@@ -38,7 +38,7 @@ class AuthSellerController extends Controller
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => '3',
-                'client_secret' => 'JJUy80UwAVbvlPchymhN97k9p0DqNqGmjCA33YcQ',
+                'client_secret' => 'yOjOo5uKZ0steIFdDsvJEKHFysJuaPfplIgD4f6b',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*',
@@ -86,18 +86,21 @@ class AuthSellerController extends Controller
             'store_id' => 'required|numeric|exists:stores,id',
             'full_name' => 'required|string|min:3',
             'email' =>  'required|string|unique:sellers',
+            'image' => 'required|image|mimes:jpg,png',
             'mobile' => 'required|numeric',
             'Address' => 'required|string|min:5',
             'password' => 'required|string|min:3',
-
-
-
         ]);
         if (!$validator->fails()) {
             $seller = new Seller();
             $seller->store_id = $request->input('store_id');
             $seller->full_name = $request->input('full_name');
             $seller->email = $request->input('email');
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_' . str_replace(' ', '', $seller->name) . '.' . $request->file('image')->extension();
+                $request->file('image')->storePubliclyAs('seller', $imageName, ['disk' => 'public']);
+                $seller->image = 'seller/' . $imageName;
+            }
             $seller->mobile = $request->input('mobile');
             $seller->Address = $request->input('Address');
             $seller->password = Hash::make($request->input('password'));
@@ -153,4 +156,64 @@ class AuthSellerController extends Controller
         }
     }
 
+
+    public function profiel($id)
+    {
+
+        if ($sellers = Seller::find($id)) {
+            return response()->json([
+                'stuts' => true,
+                'message' => 'Success',
+                'data' => $sellers,
+            ]);
+        } else {
+            return response()->json([
+                'stuts' => false,
+                'message' => 'Fail',
+                'data' => 'عذرا لا يوجد حساب بهذا المعرف',
+            ]);
+        }
+    }
+
+    public function EditProfiel(Request $request, Seller $seller, $id)
+    {
+
+        $seller = Seller::find($id);
+        $validator = validator($request->all(), [
+            'store_id' => 'required|numeric|exists:stores,id',
+            'full_name' => 'required|string|min:3',
+            'email' =>  'required|string',
+            'image' => 'required|image|mimes:jpg,png',
+            'mobile' => 'required|numeric',
+            'Address' => 'required|string|min:5',
+        ]);
+        if (!$validator->fails()) {
+            $seller->store_id = $request->input('store_id');
+            $seller->full_name = $request->input('full_name');
+            $seller->email = $request->input('email');
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_' . str_replace(' ', '', $seller->name) . '.' . $request->file('image')->extension();
+                $request->file('image')->storePubliclyAs('seller', $imageName, ['disk' => 'public']);
+                $seller->image = 'seller/' . $imageName;
+            }
+            $seller->mobile = $request->input('mobile');
+            $seller->Address = $request->input('Address');
+            $isSaved = $seller->save();
+            return response()->json(
+                [
+
+                    'message' => $isSaved ? 'تم تعديل الحساب الشخصي' : 'فشل في تعديل الحساب الشخصي'
+                ],
+                $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+            );
+        } else {
+            return response()->json(
+                [
+                    'message' => $validator->getMessageBag()->first()
+                ],
+                Response::HTTP_BAD_REQUEST
+
+            );
+        }
+    }
 }

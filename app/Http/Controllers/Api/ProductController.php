@@ -12,10 +12,12 @@ class ProductController extends Controller
 {
     //
 
-    public function index()
+    public function index(Request $request)
     {
 
-        $products =  Product::where('status', '=', 'Visible')->with('Category')->get();
+        $products = Product::where('status', '=', 'Visible')->with('Category')->whereHas('Category', function ($query) use ($request) {
+            $query->where('categorie_id', '=', $request->user()->id);
+        })->get();
         return response()->json([
             'status' => true,
             'message' => "Success",
