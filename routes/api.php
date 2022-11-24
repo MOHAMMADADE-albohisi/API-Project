@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\CategorieController;
 use App\Http\Controllers\Api\ComplainController;
 use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\ForgetPassword;
-use App\Http\Controllers\Api\HomeBuyerController;
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderDriverController;
 use App\Http\Controllers\Api\ProductController;
@@ -61,6 +61,7 @@ Route::prefix('cms/admin/')->group(
 );
 
 Route::prefix('cms/admin/')->middleware('auth:seller')->group(function () {
+    Route::get('/', [HomeController::class, 'DashbordSeller']);
     Route::get('categorie', [CategorieController::class, 'index']);
     Route::get('product', [ProductController::class, 'index']);
     Route::post('product/create', [ProductController::class, 'store']);
@@ -108,8 +109,8 @@ Route::prefix('cms/buyer/')->group(
 
 Route::prefix('cms/buyer/')->middleware('auth:buyer')->group(function () {
 
-    Route::get('/', [HomeBuyerController::class, 'index']);
-    Route::post('serch/{name}', [HomeBuyerController::class, 'serchApi']);
+    Route::get('/', [HomeController::class, 'DashbordBuyer']);
+    Route::post('serch/{name}', [HomeController::class, 'serchApi']);
     Route::post('category/{id}', [ProductController::class, 'CategoryDetails']);
     Route::get('driver', [DriverController::class, 'index']);
     Route::get('order', [OrderController::class, 'index']);
@@ -151,6 +152,7 @@ Route::prefix('cms/driver/')->group(
 );
 
 Route::prefix('cms/driver/')->middleware('auth:driver')->group(function () {
+    Route::get('/', [HomeController::class, 'DashbordDriver']);
     Route::get('order', [DriverController::class, 'order']);
     Route::post('orderdetails/{id}', [DriverController::class, 'OrderDriver']);
     Route::post('sale/create', [SaleController::class, 'Store']);
@@ -160,5 +162,6 @@ Route::prefix('cms/driver/')->middleware('auth:driver')->group(function () {
 
     Route::post('profiel/{id}', [AuthDriverController::class, 'profiel']);
     Route::post('editProfiel/{id}', [AuthDriverController::class, 'EditProfiel']);
+
     Route::get('logout', [AuthDriverController::class, 'logout']);
 });

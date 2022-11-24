@@ -1,13 +1,11 @@
 @component('mail::message')
-# Welcome , {{$name}}
-
-You have requested to reset your password
-
+# اهلا بك , {{$name}}
+لقد طلبت إعادة تعيين كلمة المرور الخاصة بك
 @component('mail::panel')
-Reset code is: {{$code}}
+رمز إعادة التعيين هو: {{$code}}
 @endcomponent
 
 
-Thanks,<br>
+شكرًا,<br>
 {{ config('app.name') }}
 @endcomponent
