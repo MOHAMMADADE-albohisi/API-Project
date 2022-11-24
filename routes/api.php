@@ -152,7 +152,6 @@ Route::prefix('cms/driver/')->group(
 );
 
 Route::prefix('cms/driver/')->middleware('auth:driver')->group(function () {
-    Route::get('/', [HomeController::class, 'DashbordDriver']);
     Route::get('order', [DriverController::class, 'order']);
     Route::post('orderdetails/{id}', [DriverController::class, 'OrderDriver']);
     Route::post('sale/create', [SaleController::class, 'Store']);

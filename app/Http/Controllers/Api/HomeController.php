@@ -122,21 +122,5 @@ class HomeController extends Controller
     }
 
 
-    public function DashbordDriver(Request $request)
-    {
-        $orderDriver = Sale::whereHas('Driver', function ($query) use ($request) {
-            $query->where('driver_id', '=', $request->user()->id);
-        })->count();
-
-        $orderDriverTotel = Sale::whereHas('driver', function ($query) use ($request) {
-            $query->where('order_id', '=', $request->user()->id);
-        })->count();
-
-        return response()->json([
-            'data' => [
-                'orderDriver' => $orderDriver,
-                'orderDriverTotel' => "$orderDriverTotel $",
-            ]
-        ]);
-    }
+    
 }
