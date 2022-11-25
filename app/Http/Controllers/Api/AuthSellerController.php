@@ -88,7 +88,7 @@ class AuthSellerController extends Controller
             'email' =>  'required|string|unique:sellers',
             'image' => 'required|image|mimes:jpg,png',
             'mobile' => 'required|numeric',
-            'Address' => 'required|string|min:5',
+            'commercial_record_number' => 'required|numeric',
             'password' => 'required|string|min:3',
         ]);
         if (!$validator->fails()) {
@@ -102,7 +102,7 @@ class AuthSellerController extends Controller
                 $seller->image = 'seller/' . $imageName;
             }
             $seller->mobile = $request->input('mobile');
-            $seller->Address = $request->input('Address');
+            $seller->commercial_record_number = $request->input('commercial_record_number');
             $seller->password = Hash::make($request->input('password'));
             $isSaved = $seller->save();
             return response()->json(

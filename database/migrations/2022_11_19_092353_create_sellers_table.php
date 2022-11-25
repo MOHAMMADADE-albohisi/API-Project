@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->uniqid();
             $table->integer('mobile');
             $table->string('image')->nullable();
-            $table->string('address');
+            $table->integer('commercial_record_number');
             $table->string('password');
             $table->string('verificcation_code')->nullable();
             $table->foreignId('store_id')->constrained();
