@@ -12,6 +12,7 @@ use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\Seller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Constraint\Count;
@@ -19,7 +20,7 @@ use PHPUnit\Framework\Constraint\Count;
 class HomeController extends Controller
 {
     //
-    public function DashbordBuyer(Request $request)
+    public function HomeBuyer(Request $request)
     {
         $totelOrdersWaiting = OrderProduct::withCount(['buyer', 'order', 'product'])->whereHas('order', function ($query) use ($request) {
             $query->where('status', '=', 'Waiting');
@@ -76,7 +77,7 @@ class HomeController extends Controller
         }
     }
 
-    public function DashbordSeller(Request $request)
+    public function HomeSeller(Request $request)
     {
         $totelOrders = OrderProduct::whereHas('store', function ($query) use ($request) {
             $query->where('store_id', '=', $request->user()->store_id);
@@ -121,6 +122,40 @@ class HomeController extends Controller
         ]);
     }
 
+    public function HomeDriver(Request $request)
+    {
 
-    
+
+        $ToterOrders =  OrderDriver::whereHas('driver', function ($query) use ($request) {
+            $query->where('driver_id', '=', $request->user()->id);
+        })->count();
+
+
+        $orderNew =  OrderDriver::whereDate('created_at',  '=',  Carbon::today())
+            ->whereHas('driver', function ($query) use ($request) {
+                $query->where('driver_id', '=', $request->user()->id);
+            })->count();
+
+
+        $TotelSaleOrder =  Sale::whereHas('OrderDriver', function ($query) use ($request) {
+            $query->where('driver_id', '=', $request->user()->id);
+        })->count();
+
+        $TotelSaleOrderNew =  Sale::whereDate('created_at',  '=',  Carbon::today())
+            ->whereHas('OrderDriver', function ($query) use ($request) {
+                $query->where('driver_id', '=', $request->user()->id);
+            })->count();
+
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Success',
+            'data' => [
+                'جميع الطلبات' => $ToterOrders,
+                'الطلبات اليومية' => $orderNew,
+                'مجموع المبيعات ' => $TotelSaleOrder,
+                'مجموع المبيعات اليويمة ' => $TotelSaleOrderNew,
+            ]
+        ]);
+    }
 }

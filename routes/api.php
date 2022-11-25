@@ -61,7 +61,7 @@ Route::prefix('cms/admin/')->group(
 );
 
 Route::prefix('cms/admin/')->middleware('auth:seller')->group(function () {
-    Route::get('/', [HomeController::class, 'DashbordSeller']);
+    Route::get('/', [HomeController::class, 'HomeSeller']);
     Route::get('categorie', [CategorieController::class, 'index']);
     Route::get('product', [ProductController::class, 'index']);
     Route::post('product/create', [ProductController::class, 'store']);
@@ -109,7 +109,7 @@ Route::prefix('cms/buyer/')->group(
 
 Route::prefix('cms/buyer/')->middleware('auth:buyer')->group(function () {
 
-    Route::get('/', [HomeController::class, 'DashbordBuyer']);
+    Route::get('/', [HomeController::class, 'HomeBuyer']);
     Route::post('serch/{name}', [HomeController::class, 'serchApi']);
     Route::post('category/{id}', [ProductController::class, 'CategoryDetails']);
     Route::get('driver', [DriverController::class, 'index']);
@@ -152,6 +152,7 @@ Route::prefix('cms/driver/')->group(
 );
 
 Route::prefix('cms/driver/')->middleware('auth:driver')->group(function () {
+    Route::get('/', [HomeController::class, 'HomeDriver']);
     Route::get('order', [DriverController::class, 'order']);
     Route::post('orderdetails/{id}', [DriverController::class, 'OrderDriver']);
     Route::post('sale/create', [SaleController::class, 'Store']);
