@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ForgetPassword;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderDriverController;
+use App\Http\Controllers\Api\PayPalPaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RegisterSellerController;
 use App\Http\Controllers\Api\SaleController;
@@ -122,6 +123,10 @@ Route::prefix('cms/buyer/')->middleware('auth:buyer')->group(function () {
     Route::get('complain', [ComplainController::class, 'index']);
     Route::post('complain/create', [ComplainController::class, 'store']);
     Route::post('/changePassword', [AuthSellerController::class, 'changePassword']);
+
+    Route::get('payments/pay', [PayPalPaymentController::class, 'sendPayment']);
+    Route::get('payments/verify/{payment?}', [PayPalPaymentController::class, 'payment_verify'])->name('verify-payment');
+
 
     Route::post('profiel/{id}', [AuthBuyerController::class, 'profiel']);
     Route::post('editProfiel/{id}', [AuthBuyerController::class, 'EditProfiel']);

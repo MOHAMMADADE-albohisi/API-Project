@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->float('total');
             $table->enum('payment_type', ['Cash', 'Online']);
-            $table->enum('payment_status', ['Paid', 'Waiting']);
+            $table->enum('payment_status', ['Paid', 'Waiting', 'cancel'])->default('Waiting');
             $table->enum('status', ['Waiting', 'Processing', 'Delivered', 'Canceled', 'Rejected'])->default('Waiting');
             $table->decimal('latitude')->nullable();
             $table->decimal('longitude')->nullable();

@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Nafezly\Payments\Classes\PayPalPayment;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
@@ -35,7 +36,7 @@ class OrderController extends Controller
             'store_id' => 'required|numeric|exists:stores,id',
             'total' => 'required|numeric',
             'payment_type' => 'required|string|in:Cash,Online',
-            'payment_status' => 'required|string|in:Paid,Waiting',
+            'payment_status' => 'required|string|in:Paid,Waiting,cancel',
             'count' => 'required|numeric',
             'item_price' => 'required|numeric',
             'product' => 'required|numeric|exists:products,id',
@@ -60,7 +61,12 @@ class OrderController extends Controller
                 $orderProduct->buyer_id = $buyer->id;
                 $orderProduct->order_id = $order->id;
                 $orderProduct->save();
+                if ($request->input('payment_type') == 'Online') {
+                    $payPal = new PayPalPaymentController();
+                    return $payPal->sendPayment($request);
+                }
             }
+
             return response()->json(
                 [
 
