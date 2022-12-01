@@ -60,11 +60,13 @@ class OrderController extends Controller
                 $buyer = Auth::guard('buyer')->user();
                 $orderProduct->buyer_id = $buyer->id;
                 $orderProduct->order_id = $order->id;
-                $orderProduct->save();
                 if ($request->input('payment_type') == 'Online') {
                     $payPal = new PayPalPaymentController();
                     return $payPal->sendPayment($request);
                 }
+                $orderProduct->save();
+                // dd($request->input('payment_status'), $request->input('payment_status') == 'Online');
+
             }
 
             return response()->json(
