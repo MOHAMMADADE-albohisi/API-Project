@@ -53,6 +53,7 @@ class OrderDriver extends Model
         'seller_count',
         'order_count',
         'updated_at',
+        'created_at',
         'driver_count',
         'order_product_count',
 

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Sale extends Model
 {
     use HasFactory;
-    
+
     public function Product()
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
@@ -49,5 +49,6 @@ class Sale extends Model
     protected $hidden = [
         'status',
         'updated_at',
+        'created_at'
     ];
 }

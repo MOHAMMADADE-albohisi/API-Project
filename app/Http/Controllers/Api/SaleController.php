@@ -18,11 +18,8 @@ class SaleController extends Controller
         $sales = Sale::whereHas('Seller', function ($query) use ($request) {
             $query->where('seller_id', '=', $request->user()->id);
         })->get();
-        $sales->load('Product');
-        $sales->load('Seller');
         $sales->load('Buyer');
         $sales->load('Order');
-        $sales->load('OrderDriver');
         return response()->json([
             'Status' => true,
             'message' => "Success",

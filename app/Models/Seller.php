@@ -38,6 +38,7 @@ class Seller extends Authenticatable
         'password',
         'remember_token',
         'updated_at',
+        'created_at',
         'email_verified_at',
         'verificcation_code',
         'image',

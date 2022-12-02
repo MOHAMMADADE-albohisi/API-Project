@@ -12,4 +12,9 @@ class Complain extends Model
     {
         return $this->belongsTo(Buyer::class, 'buyer_id', 'id');
     }
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

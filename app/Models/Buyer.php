@@ -53,6 +53,7 @@ class Buyer extends Authenticatable
         'password',
         'remember_token',
         'updated_at',
+        'created_at',
         'verificcation_code',
         'email_verified_at',
         'image',
