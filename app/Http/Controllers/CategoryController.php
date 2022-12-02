@@ -21,6 +21,17 @@ class CategoryController extends Controller
         return response()->view('cms.subcategoryList-option', ['categorys' => $categorys]);
     }
 
+    public function indexApi()
+    {
+        //
+        $categorys = Category::where('status', '=', 'Visible')->get();
+        return response()->json([
+            'stuts' => true,
+            'masseg' => 'Success',
+            'data' => $categorys,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -46,7 +57,7 @@ class CategoryController extends Controller
             'title' => 'required|string|min:3',
             'description' => 'required|string|min:3',
             'status' => 'required|string|min:3',
-            'image' => 'image|mimes:jpg,png',
+            'image' => 'required|image|mimes:jpg,png',
 
         ]);
 

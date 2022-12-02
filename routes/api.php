@@ -17,7 +17,9 @@ use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\SellerController;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\SuggestionController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Complain;
 use App\Models\Product;
 use App\Models\Suggestion;
@@ -58,6 +60,8 @@ Route::prefix('cms/admin/')->group(
         Route::post('store/create', [StoreController::class, 'store']);
         Route::put('store/{id}', [StoreController::class, 'update']);
         Route::delete('store/{id}', [StoreController::class, 'destroy']);
+
+        Route::get('category', [CategoryController::class, 'indexApi']);
     }
 );
 

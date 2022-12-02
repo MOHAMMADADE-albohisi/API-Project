@@ -35,7 +35,7 @@ class HomeController extends Controller
         })->count();
 
 
-        $categorys = Category::with('Product')->whereHas('store', function ($query) use ($request) {
+        $categorys = Category::with('Product')->whereHas('Product', function ($query) use ($request) {
             $query->where('store_id', '=', $request->user()->store_id);
         })->get();
 
@@ -59,9 +59,7 @@ class HomeController extends Controller
 
     public function serchApi(Request $request, $name)
     {
-        $products = Product::where("name", "like", "%" . $name . "%")->whereHas('Category', function ($query) use ($request) {
-            $query->where('store_id', '=', $request->user()->store_id);
-        })->get();
+        $products = Product::where("name", "like", "%" . $name . "%")->get();
         if ($products !== null) {
             return response()->json([
                 'status' => true,

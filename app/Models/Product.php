@@ -32,6 +32,7 @@ class Product extends Model
         'status',
         'updated_at',
         'created_at',
-        'image'
+        'image',
+        'pivot'
     ];
 }

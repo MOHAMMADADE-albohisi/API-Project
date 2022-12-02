@@ -37,13 +37,20 @@
                             </div>
 
 
-                            <div class="form-group">
-                                <label>store_id</label>
-                                <select class="form-control roles" style="width: 100%;" id="store_id">
-                                    @foreach ($store as $store)
-                                    <option value="{{$store->id}}">{{$store->name_en}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <div class="col-md-1">
+                                        <span>image</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12">
+                                        <fieldset class="form-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="image">
+                                                <label class="custom-file-label" for="image">image</label>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
                             </div>
 
 
@@ -71,8 +78,7 @@
         formData.append('title',document.getElementById('title').value);
         formData.append('description',document.getElementById('description').value);
         formData.append('status',document.getElementById('status').value);
-        formData.append('store_id',document.getElementById('store_id').value);
-
+        formData.append('image',document.getElementById('image').files[0]);
         axios.post('/category', formData)
         .then(function (response) {
             console.log(response);

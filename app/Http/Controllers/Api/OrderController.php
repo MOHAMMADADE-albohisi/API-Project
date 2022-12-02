@@ -25,7 +25,7 @@ class OrderController extends Controller
             $query->where('buyer_id', '=', $request->user()->id);
         })->get();
         $orders->load('order');
-        $orders->load('product');
+        // $orders->load('product');
         return response()->json([
             'status' => true,
             'message' => "Success",

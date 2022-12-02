@@ -38,7 +38,7 @@ class AuthBuyerController extends Controller
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => '4',
-                'client_secret' => 'zFnXeGHLhgEXqvp0LhBAvuCtfMeH6fYvHW32DfBR',
+                'client_secret' => 'B5Dz0iEocf6SOkI4lsKMeD7DMtBTOPHetj4vusiG',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*',

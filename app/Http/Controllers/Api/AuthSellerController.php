@@ -38,7 +38,7 @@ class AuthSellerController extends Controller
             $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
                 'grant_type' => 'password',
                 'client_id' => '3',
-                'client_secret' => 'YYDNnJfKIMICStgZNJSDBVxps3tfxIuGaMCGLJrF',
+                'client_secret' => 'VaCoxfMMuwXc4M6Kwy6P9QLAlKAkWJNVHrf1AM2H',
                 'username' => $request->input('email'),
                 'password' => $request->input('password'),
                 'scope' => '*',
