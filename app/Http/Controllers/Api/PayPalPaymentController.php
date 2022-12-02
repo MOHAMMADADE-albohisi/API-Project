@@ -40,7 +40,7 @@ class PayPalPaymentController extends Controller
         $res = (object) $paypal->verify($request);
         // قم بما تريد ، غير نوع الحالة للبرودكت / سجل قيمة الدفع في الداتا بيز اللي بدك اياه بتقدر تطبع الرسبونس كله وشوف ايش بلزمك منه
         if ($res->success) {
-            
+
         } else {
             return response()->json([
                 'stauts' => false,

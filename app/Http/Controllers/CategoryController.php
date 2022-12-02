@@ -43,23 +43,27 @@ class CategoryController extends Controller
     {
         //
         $validator = Validator($request->all(), [
-            'store_id' => 'required|numeric|exists:stores,id',
             'title' => 'required|string|min:3',
             'description' => 'required|string|min:3',
             'status' => 'required|string|min:3',
+            'image' => 'image|mimes:jpg,png',
 
         ]);
 
         if (!$validator->fails()) {
             $category = new Category();
-            $category->store_id = $request->input('store_id');
             $category->title = $request->input('title');
             $category->description = $request->input('description');
             $category->status = $request->input('status');
+            if ($request->hasFile('image')) {
+                $imageName = time() . '_' . str_replace(' ', '', $category->name) . '.' . $request->file('image')->extension();
+                $request->file('image')->storePubliclyAs('categorys', $imageName, ['disk' => 'public']);
+                $category->image = 'categorys/' . $imageName;
+            }
             $isSaved = $category->save();
             return Response()->json(
 
-                ['message' => $isSaved ? 'created successfully' : 'created failed!'],
+                ['message' => $isSaved ? 'تم انشاء المنتج بنجاح' : 'فشل انشاء المنتتج'],
 
                 $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST
             );

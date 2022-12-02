@@ -20,7 +20,7 @@ return new class extends Migration
             $table->float('price');
             $table->string('image')->nullable();
             $table->enum('status', ['Visible', 'InVisible'])->default('Visible');
-            $table->foreignId('categorie_id')->constrained();
+            $table->foreignId('store_id')->constrained();
             $table->timestamps();
         });
     }

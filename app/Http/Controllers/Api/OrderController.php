@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\ControllersService;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Nafezly\Payments\Classes\PayPalPayment;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,7 +26,6 @@ class OrderController extends Controller
         })->get();
         $orders->load('order');
         $orders->load('product');
-        $orders->load('store');
         return response()->json([
             'status' => true,
             'message' => "Success",
@@ -29,63 +33,80 @@ class OrderController extends Controller
         ]);
     }
 
-    public function store(Request $request, Order $order)
-    {
 
-        $validator = validator($request->all(), [
+    public function store(Request $request)
+    {
+        //
+        $cart = json_decode($request->cart, true);
+        $storeId = auth('buyer')->user()->store_id;
+        $userId = auth('buyer')->id();
+        $validator = Validator::make([
+            'cart' => $cart,
+            'payment_type' => $request->payment_type,
             'store_id' => 'required|numeric|exists:stores,id',
             'total' => 'required|numeric',
-            'payment_type' => 'required|string|in:Cash,Online',
+            'count' => 'required|numeric|min:1',
             'payment_status' => 'required|string|in:Paid,Waiting,cancel',
-            'count' => 'required|numeric',
-            'item_price' => 'required|numeric',
-            'product' => 'required|numeric|exists:products,id',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
-
+        ], [
+            'cart' => 'array',
+            'cart.*.product_id' => [
+                'required',
+                Rule::exists('products', 'id')->where(function ($query) use ($storeId) {
+                    $query->where('store_id', $storeId);
+                })
+            ],
+            'cart.*.quantity' => 'required|integer|min:1',
+            'payment_type' => 'required|string|in:Cash,Online',
         ]);
+
         if (!$validator->fails()) {
+            $orderProducts = [];
+            $overalTotal = 0;
+            foreach ($cart as $orderProduct) {
+                $product = Product::findOrFail($orderProduct['product_id']);
+                $newOrderProduct = new OrderProduct();
+                $newOrderProduct->product_id = $orderProduct['product_id'];
+                $newOrderProduct->quantity = $orderProduct['quantity'];
+                $newOrderProduct->total = $orderProduct['quantity'] * $product->price;
+                $newOrderProduct->buyer_id = auth('buyer')->id();
+                $newOrderProduct->store_id = $storeId;
+
+
+                $overalTotal += $newOrderProduct->total;
+                array_push($orderProducts, $newOrderProduct);
+            }
             $order = new Order();
-            $order->total = $request->input('total');
-            $order->payment_type = $request->input('payment_type');
-            $order->latitude = $request->input('latitude');
-            $order->longitude = $request->input('longitude');
+            $order->buyer_id = auth('buyer')->id();
+            $order->payment_type = $request->get('payment_type');
+            $order->longitude = $request->get('longitude');
+            $order->latitude = $request->get('latitude');
+            $order->total = $overalTotal;
+            $order->store_id = $storeId;
+            if ($request->input('payment_type') == 'Online') {
+                $payPal = new PayPalPaymentController();
+                return $payPal->sendPayment($request);
+            }
             $isSaved = $order->save();
             if ($isSaved) {
-                $orderProduct = new OrderProduct();
-                $orderProduct->store_id = $request->input('store_id');
-                $orderProduct->count = $request->input('count');
-                $orderProduct->item_price = $request->input('item_price');
-                $orderProduct->product_id = $request->input('product');
-                $buyer = Auth::guard('buyer')->user();
-                $orderProduct->buyer_id = $buyer->id;
-                $orderProduct->order_id = $order->id;
-                if ($request->input('payment_type') == 'Online') {
-                    $payPal = new PayPalPaymentController();
-                    return $payPal->sendPayment($request);
+                $savedOrderProducts = $order->orderProducts()->saveMany($orderProducts);
+                foreach ($savedOrderProducts as $orderProduct) {
+                    $product = $orderProduct->product;
+                    $product->save();
                 }
-                $orderProduct->save();
-                // dd($request->input('payment_status'), $request->input('payment_status') == 'Online');
-
             }
-
             return response()->json(
-                [
-
-                    'message' => $isSaved ? 'تم أرسال الطلب بنجاح' : 'فشل إنشاء الطلب'
-                ],
+                ['message' => $isSaved ? 'تم ارسال الطلب بنجاح' : 'فشل في ارسال الطلب'],
                 $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
             );
         } else {
-            return response()->json(
-                [
-                    'message' => $validator->getMessageBag()->first()
-                ],
-                Response::HTTP_BAD_REQUEST
-
-            );
+            //TODO Handle your error
+            return response()->json(['message' => $validator->getMessageBag()->first()], 400);
         }
     }
+
+
 
 
     public function update(Request $request, $id)

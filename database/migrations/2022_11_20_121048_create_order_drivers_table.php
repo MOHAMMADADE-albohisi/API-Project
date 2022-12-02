@@ -34,8 +34,7 @@ return new class extends Migration
             $table->foreignId('driver_id');
             $table->foreign('driver_id')->references('id')->on('drivers');
 
-            $table->foreignId('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
+            
 
 
             $table->timestamps();

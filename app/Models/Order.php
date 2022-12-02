@@ -9,6 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $with = ['Product'];
 
     public function orderProducts()
     {

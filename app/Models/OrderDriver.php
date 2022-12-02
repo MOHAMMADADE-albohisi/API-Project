@@ -8,19 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class OrderDriver extends Model
 {
     use HasFactory;
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
-    }
 
     public function order()
     {
         return $this->belongsTo(Order::class, 'order_id', 'id');
-    }
-
-    public function productOrders()
-    {
-        return $this->hasMany(OrderProduct::class, 'product_id', 'id');
     }
 
     public function buyer()

@@ -42,7 +42,7 @@ class HomeController extends Controller
 
         $TotelCountOrder = OrderProduct::whereHas('store', function ($query) use ($request) {
             $query->where('buyer_id', '=', $request->user()->id);
-        })->sum('item_price');
+        })->sum('total');
 
         return response()->json([
             'status' => true,
@@ -91,17 +91,13 @@ class HomeController extends Controller
             $query->where('store_id', '=', $request->user()->store_id);
         })->count();
 
-        $totelCategorys = Category::whereHas('store', function ($query) use ($request) {
-            $query->where('store_id', '=', $request->user()->store_id);
-        })->count();
+
 
         $TotelCountOrder = OrderProduct::whereHas('store', function ($query) use ($request) {
             $query->where('store_id', '=', $request->user()->store_id);
-        })->sum('item_price');
+        })->sum('total');
 
-        $totelCategorys = Category::whereHas('store', function ($query) use ($request) {
-            $query->where('store_id', '=', $request->user()->store_id);
-        })->count();
+
 
         $totelSellers = Seller::whereHas('store', function ($query) use ($request) {
             $query->where('store_id', '=', $request->user()->store_id);
@@ -114,7 +110,6 @@ class HomeController extends Controller
                 'محموع الطلبات' => $totelOrders,
                 'مجموع الزبائن' => $totelBuyers,
                 'مجموع السائقين ' => $totelDrivers,
-                'مجموع المنتجات' => $totelCategorys,
                 'مجموع اسعار المبيعات' => "$TotelCountOrder$",
                 'عدد مدراء المتجر الخاص بك ' => $totelSellers,
 

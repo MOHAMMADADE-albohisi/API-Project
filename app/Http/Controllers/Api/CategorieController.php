@@ -14,14 +14,13 @@ class CategorieController extends Controller
     public function index(Request $request)
     {
         // $categorie = Category::with('Product')->get();
-        $categorie = Category::withCount(['Product', 'Store'])->whereHas('Store', function ($query) use ($request) {
-            $query->where('store_id', '=', $request->user()->id);
-        })->get();
+        $categories = Category::where('status', '=', 'Visible')->get();
+
 
         return response()->json([
             'stuts' => true,
             'message' => 'Success',
-            'data' => $categorie,
+            'data' => $categories,
         ]);
     }
 }

@@ -21,6 +21,11 @@ return new class extends Migration
             $table->enum('status', ['Waiting', 'Processing', 'Delivered', 'Canceled', 'Rejected'])->default('Waiting');
             $table->decimal('latitude')->nullable();
             $table->decimal('longitude')->nullable();
+            $table->foreignId('buyer_id');
+            $table->foreign('buyer_id')->references('id')->on('buyers');
+            $table->foreignId('store_id');
+            $table->foreign('store_id')->references('id')->on('stores');
+
             $table->timestamps();
         });
     }

@@ -52,6 +52,7 @@ class SaleController extends Controller
             if ($isSaved) {
                 $order = Order::where('id', $request->get('order_id'))->first();
                 $order->status = 'Delivered';
+                $order->payment_status = 'Paid';
                 $order->save();
             }
             return response()->json(

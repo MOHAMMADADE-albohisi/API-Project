@@ -38,7 +38,6 @@ class OrderDriverController extends Controller
             'order_id' => 'required|numeric|exists:order_products,id',
             'driver_id' => 'required|numeric|exists:drivers,id',
             'buyer_id' => 'required|numeric|exists:buyers,id',
-            'product_id' => 'required|numeric|exists:products,id',
             'store_id' => 'required|numeric|exists:stores,id',
             'count' => 'required|numeric',
             'item_price' => 'required|numeric',
@@ -49,7 +48,6 @@ class OrderDriverController extends Controller
             $orderdriver->item_price = $request->input('item_price');
             $orderdriver->order_id = $request->input('order_id');
             $orderdriver->buyer_id = $request->input('buyer_id');
-            $orderdriver->product_id = $request->input('product_id');
             $orderdriver->store_id = $request->input('store_id');
             $seller = Auth::guard('seller')->user();
             $orderdriver->seller_id = $seller->id;

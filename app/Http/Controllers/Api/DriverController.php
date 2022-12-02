@@ -146,9 +146,8 @@ class DriverController extends Controller
         })->get();
         // $orderdriver = OrderDriver::find($id);
         if ($orderdriver !== null) {
-            $orderdriver->load('orderProduct');
             $orderdriver->load('driver');
-            $orderdriver->load('product');
+            $orderdriver->load('order');
             $orderdriver->load('buyer');
             $orderdriver->load('store');
             return response()->json([

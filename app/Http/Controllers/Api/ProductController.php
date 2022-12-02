@@ -15,8 +15,8 @@ class ProductController extends Controller
     public function index(Request $request)
     {
 
-        $products = Product::where('status', '=', 'Visible')->with('Category')->whereHas('Category', function ($query) use ($request) {
-            $query->where('categorie_id', '=', $request->user()->id);
+        $products = Product::where('status', '=', 'Visible')->whereHas('Sale', function ($query) use ($request) {
+            $query->where('product_id', '=', $request->user()->id);
         })->get();
         return response()->json([
             'status' => true,
@@ -28,7 +28,7 @@ class ProductController extends Controller
     public function Store(Request $request, Product $product)
     {
         $validator = validator($request->all(), [
-            'categorie_id' => 'required|numeric|exists:categories,id',
+            'store_id' => 'required|numeric|exists:stores,id',
             'name' => 'required|string|min:3',
             'description' => 'required|string|min:5',
             'price' => 'required|numeric',
@@ -38,15 +38,15 @@ class ProductController extends Controller
         ]);
         if (!$validator->fails()) {
             $product = new Product();
-            $product->categorie_id = $request->input('categorie_id');
+            $product->store_id = $request->input('store_id');
             $product->name = $request->input('name');
             $product->description = $request->input('description');
             $product->price = $request->input('price');
             $product->status = $request->input('status');
             if ($request->hasFile('image')) {
                 $imageName = time() . '_' . str_replace(' ', '', $product->name) . '.' . $request->file('image')->extension();
-                $request->file('image')->storePubliclyAs('product', $imageName, ['disk' => 'public']);
-                $product->image = 'product/' . $imageName;
+                $request->file('image')->storePubliclyAs('products', $imageName, ['disk' => 'public']);
+                $product->image = 'products/' . $imageName;
             }
             $isSaved = $product->save();
             return response()->json(
