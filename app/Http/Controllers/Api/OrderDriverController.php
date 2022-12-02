@@ -22,7 +22,6 @@ class OrderDriverController extends Controller
             })->get();
         $orderDriver->load('orderProduct');
         $orderDriver->load('driver');
-        $orderDriver->load('product');
         $orderDriver->load('buyer');
 
         return response()->json([
