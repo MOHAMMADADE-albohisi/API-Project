@@ -33,31 +33,31 @@ class AuthSellerController extends Controller
 
     private function genaratePGCt(Request $request)
     {
-        try {
-            $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
-                'grant_type' => 'password',
-                'client_id' => '1',
-                'client_secret' => 'SszivA4hoqwUSIkOewCfnEM6P4qGVRkdBeJYLDzE',
-                'username' => $request->input('email'),
-                'password' => $request->input('password'),
-                'scope' => '*',
-            ]);
-            $decodedResponse = json_decode($response);
-            $seller = Seller::where('email', '=', $request->input('email'))->first();
-            $seller->setAttribute('token', $decodedResponse->access_token);
-            $seller->load('store');
-            return response()->json([
-                'status' => true,
-                'message' => 'تم تسجيل الدخول بنجاح',
-                'data' => $seller,
-            ], Response::HTTP_OK);
-        } catch (Exception $ex) {
-            $responseMessage = isset($response) ? json_decode($response)->message : 'فشل في تسجيل الدخول الرجاء المحاولة مرة أخرى';
-            return response()->json([
-                'status' => false,
-                'message' => $responseMessage,
-            ], Response::HTTP_BAD_REQUEST);
-        }
+        // try {
+        $response = Http::asForm()->post('http://127.0.0.1:81/oauth/token', [
+            'grant_type' => 'password',
+            'client_id' => '1',
+            'client_secret' => 'SszivA4hoqwUSIkOewCfnEM6P4qGVRkdBeJYLDzE',
+            'username' => $request->input('email'),
+            'password' => $request->input('password'),
+            'scope' => '*',
+        ]);
+        $decodedResponse = json_decode($response);
+        $seller = Seller::where('email', '=', $request->input('email'))->first();
+        $seller->setAttribute('token', $decodedResponse->access_token);
+        $seller->load('store');
+        return response()->json([
+            'status' => true,
+            'message' => 'تم تسجيل الدخول بنجاح',
+            'data' => $seller,
+        ], Response::HTTP_OK);
+        // } catch (Exception $ex) {
+        //     $responseMessage = isset($response) ? json_decode($response)->message : 'فشل في تسجيل الدخول الرجاء المحاولة مرة أخرى';
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => $responseMessage,
+        //     ], Response::HTTP_BAD_REQUEST);
+        // }
     }
 
 
